@@ -5,7 +5,12 @@
 #' @param manager_id the manager ID of the team to show
 #'
 #' @return tibble of information about current picks
+#'
+#' @export
 get_my_team <- function(manager_id = 7330951) {
+
+  # Check authentication
+  require_authentication()
 
   # Construct endpoint URL for my team
   my_team_ep <- construct(paste0("my-team/", manager_id, "/"))
@@ -13,19 +18,7 @@ get_my_team <- function(manager_id = 7330951) {
   # Get team data
   rep <- httr2::request(my_team_ep) |>
     httr2::req_headers(
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-      "Accept-Encoding" = "gzip, deflate, br",
-      "Accept-Language" = "en-GB,en;q=0.5",
-      "Connection" = "keep-alive",
-      "Cookie" = "datadome=H42HXuFNIBXvyFC8xBWbpUhyVV5QNB52T9C.iOA_3kSFZM-xfP9.WeTBP7Ijzl~W6RB6t5rr8uy_XGP8UFvUEIF99Wr9~~JzVYl75u~yqH1bKsJcs72_QRcIrJ-N9Z4; _ga=GA1.2.424242963.1659705746; _ga_844XQSF4K8=GS1.1.1660332201.7.1.1660334929.58; pl_euconsent-v2=CPdQv_BPdQv_BFCABAENCbCsAP_AAH_AAAwIF5wAQF5gXnABAXmAAAAA.YAAAAAAAAAAA; pl_euconsent-v2-intent-confirmed={%22tcf%22:[755]%2C%22oob%22:[]}; pl_oob-vendors={}; csrftoken=d1HEnQhQ0t5HA8Iv6TRzaBYqi244meXr3T3lCwPP5PoIh8ufAKFdTTq1bHfjX78d; _gid=GA1.2.478089430.1660310081; pl_profile='eyJzIjogIld6SXNOamt3TXpVNU1USmQ6MW9NYXhjOm9UQ3NxNHhHUkZka01OYXE3aDk3a3FOYk1vZkllaTVWa2kxRFdpQnRkT00iLCAidSI6IHsiaWQiOiA2OTAzNTkxMiwgImZuIjogIkNocmlzIiwgImxuIjogIkJyb3dubGllIiwgImZjIjogMTd9fQ=='; sessionid=.eJxVy8sKwjAQheF3yVrKZCaXxp17QaG4LtMkQ8RSirEr8d1Nd7o8fOd_q5G3Vxm3mp_jPamjcgHIBo3q8EsTx0dedl9nWedul-56vjWrw3A5tfkfFK6lvVFIC2jOBsQGg0hO0Ds00nMPEB1yjnYK2vpotDggiZIyBfLJcwD1-QLjITKd:1oMaxc:LV7MNBmDiiLPng-A6issYdUMFcCZ1ti_KfEE0ZqEYMw",
-      "Host" = "fantasy.premierleague.com",
-      "Sec-Fetch-Dest" = "document",
-      "Sec-Fetch-Mode" = "navigate",
-      "Sec-Fetch-Site" = "none",
-      "Sec-Fetch-User" = "?1",
-      "TE" = "trailers",
-      "Upgrade-Insecure-Requests" = "1",
-      "User-Agent" = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0"
+      "Cookie" = paste0("pl_profile=", getOption("FANTASY_COOKIE"))
     ) |>
     httr2::req_perform() |>
     httr2::resp_body_json()
@@ -64,10 +57,15 @@ get_my_team <- function(manager_id = 7330951) {
 #' desired vice-captain.
 #'
 #' @return informs the user whether the request was successful or not
+#'
+#' @export
 update_team <- function(player_ids,
                         captain_position_id,
                         vc_position_id,
                         verbose = 0) {
+
+  # Check authentication
+  require_authentication()
 
   # Validate inputs
   validated <- validate_team_selection(player_ids,
@@ -95,7 +93,7 @@ update_team <- function(player_ids,
       'content-type' = 'application/json',
       'origin' = 'https://fantasy.premierleague.com',
       'referer' = 'https://fantasy.premierleague.com/my-team',
-      "Cookie" = "datadome=H42HXuFNIBXvyFC8xBWbpUhyVV5QNB52T9C.iOA_3kSFZM-xfP9.WeTBP7Ijzl~W6RB6t5rr8uy_XGP8UFvUEIF99Wr9~~JzVYl75u~yqH1bKsJcs72_QRcIrJ-N9Z4; _ga=GA1.2.424242963.1659705746; _ga_844XQSF4K8=GS1.1.1660332201.7.1.1660334929.58; pl_euconsent-v2=CPdQv_BPdQv_BFCABAENCbCsAP_AAH_AAAwIF5wAQF5gXnABAXmAAAAA.YAAAAAAAAAAA; pl_euconsent-v2-intent-confirmed={%22tcf%22:[755]%2C%22oob%22:[]}; pl_oob-vendors={}; csrftoken=d1HEnQhQ0t5HA8Iv6TRzaBYqi244meXr3T3lCwPP5PoIh8ufAKFdTTq1bHfjX78d; _gid=GA1.2.478089430.1660310081; pl_profile='eyJzIjogIld6SXNOamt3TXpVNU1USmQ6MW9NYXhjOm9UQ3NxNHhHUkZka01OYXE3aDk3a3FOYk1vZkllaTVWa2kxRFdpQnRkT00iLCAidSI6IHsiaWQiOiA2OTAzNTkxMiwgImZuIjogIkNocmlzIiwgImxuIjogIkJyb3dubGllIiwgImZjIjogMTd9fQ=='; sessionid=.eJxVy8sKwjAQheF3yVrKZCaXxp17QaG4LtMkQ8RSirEr8d1Nd7o8fOd_q5G3Vxm3mp_jPamjcgHIBo3q8EsTx0dedl9nWedul-56vjWrw3A5tfkfFK6lvVFIC2jOBsQGg0hO0Ds00nMPEB1yjnYK2vpotDggiZIyBfLJcwD1-QLjITKd:1oMaxc:LV7MNBmDiiLPng-A6issYdUMFcCZ1ti_KfEE0ZqEYMw"
+      "Cookie" = paste0("pl_profile=", getOption("FANTASY_COOKIE"))
     ) |>
     httr2::req_body_json(data = payload) |>
     httr2::req_method("POST") |>
@@ -138,8 +136,8 @@ validate_team_selection <- function(player_ids,
 
   # Return new order of IDs
   list(ids = selection$id,
-       capt = which(selection$captain),
-       vc = which(selection$vc))
+       capt = which(selection$is_captain),
+       vc = which(selection$is_vice_captain))
 }
 
 #' Print a nicely formatted team selection
@@ -150,6 +148,8 @@ validate_team_selection <- function(player_ids,
 #' be the result of a call to get_my_team())
 #'
 #' @return print nicely formatted team sheet to console
+#'
+#' @export
 print_team_selection <- function(selection_df) {
 
   selection <- selection_df %>%

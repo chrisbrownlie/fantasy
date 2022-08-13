@@ -16,12 +16,22 @@ construct <- function(endpoint) {
 #' @param endpoint_url the URL to query
 #'
 #' @return a list
-perform_query <- function(endpoint_url) {
+perform_query <- function(endpoint_url,
+                          type = "json") {
+
+  # Check valid type
+  if (!type %in% c("json", "html", "string")) cli::cli_abort("{.arg type} must be one of 'json', 'html' or 'string'")
 
   # Query API
   response <- httr2::request(endpoint_url) |>
     httr2::req_perform()
 
   # Extract content
-  httr2::resp_body_json(response)
+  if (type == "json") {
+    httr2::resp_body_json(response)
+  } else if (type == "html") {
+    httr2::resp_body_html(response)
+  } else if (type == "string") {
+    httr2::resp_body_string(response)
+  }
 }

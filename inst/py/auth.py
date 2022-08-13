@@ -4,9 +4,9 @@ session = requests.session()
 url = 'https://users.premierleague.com/accounts/login/'
 
 payload = {
- 'password': os.environ['FPL_PASSWORD'],
- 'login': os.environ['FPL_LOGIN'],
- 'redirect_uri': 'https://fantasy.premierleague.com/a/login',
+ 'password': 'rr3Rct&Ryq&!',
+ 'login': 'chris.brownlie@hotmail.co.uk',
+ 'redirect_uri': 'https://fantasy.premierleague.com/',
  'app': 'plfpl-web'
 }
 

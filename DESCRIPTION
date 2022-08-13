@@ -14,4 +14,7 @@ Imports:
   tibble,
   dplyr,
   memoise,
-  cli
+  cli,
+  purrr,
+  rvest,
+  rstudioapi

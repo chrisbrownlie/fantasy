@@ -69,7 +69,6 @@ get_fixture_stats <- function(fixture_id = NULL) {
                                  .before = 1))
 }
 
-
 #' Format a stat
 #'
 #' Format a list of information about a particular stat as a tibble
