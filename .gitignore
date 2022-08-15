@@ -3,4 +3,3 @@ renv
 renv.lock
 .Renviron
 .Rprofile
-docs
