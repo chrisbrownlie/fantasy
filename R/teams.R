@@ -23,9 +23,10 @@ get_teams <- function() {
 #' (the default), return abbreviation
 #'
 #' @return a string representing a team name
-team_abbr <- function(id, full = FALSE) {
+team_from_id <- function(id, full = FALSE) {
   teams <- get_teams() |>
     arrange(team_id) |>
     pull(all_of(ifelse(full, "name", "short_name")))
+  if (any(!id %in% seq_along(teams))) cli::cli_abort("Invalid team ID(s) - must be between 1-20 inclusive")
   teams[id]
 }

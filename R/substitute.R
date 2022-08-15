@@ -2,7 +2,7 @@
 #'
 #' Make a substitution in your team by selecting two players to swap
 #'
-#' @param team an object with class team_selection
+#' @param team an object with class team
 #' @param p1 a numeric ID of a player in the team
 #' @param p2 a numeric ID of another player in the team
 #'
@@ -15,7 +15,7 @@ team_substitute <- function(team, p1, p2) {
 }
 
 #' @export
-team_substitute.team_selection <- function(team, p1, p2) {
+team_substitute.team <- function(team, p1, p2) {
 
   # Check that both supplied IDs are in the team
   if (!p1 %in% team$id) cli::cli_abort("{.arg p1} ({.val {p1}}) is not the ID of a player in the team")
@@ -38,8 +38,8 @@ team_substitute.team_selection <- function(team, p1, p2) {
     if (p2 == attr(team, "vc")) cli::cli_abort("{.arg p2} is the team vice-captain so cannot be swapped for a benched player. Use {.fun assign_vice_captain} to pick a new captain first.")
   }
 
-  # Create and validate the new team selection
-  team_selection(new_team,
+  # Create and validate the new team object
+  team(new_team,
                  captain = attr(team, "captain"),
                  vc = attr(team, "vc"))
 
@@ -47,5 +47,5 @@ team_substitute.team_selection <- function(team, p1, p2) {
 
 #' @export
 team_substitute.default <- function(team, p1, p2) {
-  cli::cli_abort("{.fun team_substitute} can only be used with an object of class {.cls team_selection}")
+  cli::cli_abort("{.fun team_substitute} can only be used with an object of class {.cls team}")
 }

@@ -1,0 +1,98 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# fantasy
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+{fantasy} is a wrapper for the Fantasy Premier League API. It provides a clean, intuitive set of functions to extract all the key data that is available from the API, as well as enabling actions such as transfers and team changes to be enacted programmatically. 
+
+After authenticating, the package provides a new class of object (`team`) that takes care of all the various restrictions on a team, so you can simply make transfers and substitutions and the package will notify you if they are not valid (e.g. more than 3 players from 1 club, not enough of a certain position in your team/starting XI, if a transfer exceeds your budget etc.). The `<team>` class also enables pretty printing of a team (see usage below).
+
+It maintains a tidyverse-like style, with all functions returning tibbles with readable column names. The package also provides helper functions for obtaining data from other useful sources, such as predicted team lineups from fantasyfootballscout.co.uk or relevant tweets from twitter.
+
+See [the package site](https://chrisbrownlie.github.io/fantasy/) for more details.
+
+## Installation
+
+You can install the development version of fantasy from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("chrisbrownlie/fantasy")
+```
+
+## Motivation
+There already exists at least two R packages that wrap the Fantasy Premier League API:
+
+- [fplR](https://ewenme.github.io/fplr/)
+- [fplscrapR](https://wiscostret.github.io/fplscrapR/)
+
+The reasons for building this new package are because the two packages above:
+
+- Are not regularly maintained, and so may not work with the current (2022/23) version of the FPL API,
+- Do not implement authentication, so cannot be used to perform actions and retrieve private user information, and
+- Are not built using {httr2} and so do not benefit from some of its functionality.
+
+{fantasy} aims to address all three of these.
+
+## Usage
+Below are some examples of how to use the key functions in the package. See the [{fantasy} site](https://chrisbrownlie.github.io/fantasy/) for more detailed information and examples.
+
+```{r fake-load, eval=F}
+library(fantasy)
+```
+```{r actual-load, echo=F}
+pkgload::load_all()
+```
+```{r examples}
+# Get all fixtures from the current season
+get_fixture_list()
+
+# Get stats from a particular fixture, by ID
+get_fixture_stats(fixture_id = 2)
+
+# Get all team info
+get_teams()
+
+# Get all players info
+get_players()
+
+# Get a particular player's season statistics
+get_player_summary(player_id = 283)
+
+# Authenticate to allow restricted actions - see vignette for more information
+authenticate()
+
+# See your team
+get_my_team()
+
+# Swap two players in your team
+# - {fantasy} will automatically handle any restrictions or reordering of your team
+get_my_team() |>
+  team_substitute(p1 = 465, p2 = 166)
+
+# Change the captain or vice captain
+get_my_team() |>
+  assign_role(pid = 255, role = "c") |>
+  assign_role(pid = 15, role = "vc")
+
+
+### Non-FPL API functions
+# Get predicted lineups from fantasyfootballscout.co.uk
+get_predicted_lineups()
+```
+

@@ -5,7 +5,7 @@
 #' @param manager_id the manager ID of the team to show - this does
 #' not need to be supplied once you have logged in using authenticate()
 #'
-#' @return an object of class team_selection, representing your current team
+#' @return an object of class team, representing your current team
 #'
 #' @export
 get_my_team <- function(manager_id) {
@@ -32,8 +32,8 @@ get_my_team <- function(manager_id) {
            is_captain,
            is_vice_captain)
 
-  # Convert to team_selection object and return
-  team_selection(raw_team$id,
+  # Convert to team object and return
+  team(raw_team$id,
                  captain = raw_team$id[raw_team$is_captain],
                  vc = raw_team$id[raw_team$is_vice_captain])
 }
@@ -42,11 +42,11 @@ get_my_team <- function(manager_id) {
 #'
 #' Send a request to the API to update a team.
 #'
-#' @param team either an object with class team_selection, or a list of length
+#' @param team either an object with class team, or a list of length
 #' three with the following positional elements: (1) a numeric vector of length
 #' 15 indicating the 15 player IDs of the team; (2) a single numeric ID of the
 #' captain; (3) a single numeric ID of the vice-captain.
-#' If a list is supplied, it will be converted to a team_selection object first
+#' If a list is supplied, it will be converted to a team object first
 #' before the update request is sent.
 #' @param verbose an integer from 0 to 3 denoting how verbose the request should be -
 #' passed to httr2::req_perform (0 = no output, 3 = maximum output)
@@ -63,7 +63,7 @@ update_team <- function(team,
 }
 
 #' @export
-update_team.team_selection <- function(team,
+update_team.team <- function(team,
                                        verbose = 0,
                                        report_changes = TRUE) {
 
@@ -71,7 +71,7 @@ update_team.team_selection <- function(team,
   require_authentication()
 
   # Validate inputs
-  validated <- validate_team_selection(team)
+  validated <- validate_team(team)
 
   # If changes to be summarised, get current team before update
   if (report_changes) {
@@ -126,9 +126,9 @@ update_team.list <- function(team,
   if (length(team[[2]]) != 1 |!is.numeric(team[[2]])) cli::cli_abort("If using a list to update a team, the second element must be a single numeric player ID of the captain")
   if (length(team[[3]]) != 1 |!is.numeric(team[[3]])) cli::cli_abort("If using a list to update a team, the third element must be a single numeric player ID of the vice-captain")
 
-  # Convert to team_selection
-  cli::cli_alert("Converting list to {.cls team_selection} object...")
-  valid_team <- team_selection(players = team[[1]],
+  # Convert to team
+  cli::cli_alert("Converting list to {.cls team} object...")
+  valid_team <- team(players = team[[1]],
                                captain = team[[2]],
                                vc = team[[3]])
 
@@ -140,24 +140,24 @@ update_team.list <- function(team,
 update_team.default <- function(team,
                                 verbose = 0,
                                 report_changes = TRUE) {
-  cli::cli_abort("{.fun update_team} can only be used with objects of class {.cls team_selection} or lists.")
+  cli::cli_abort("{.fun update_team} can only be used with objects of class {.cls team} or lists.")
 }
 
 #' Assign a captain or vice-captain
 #'
-#' @param team an object with class team_selection
+#' @param team an object with class team
 #' @param pid the ID of the player to assign a role to
 #' @param role either 'c' to assign them the role of
 #' captain, or 'vc' to assign them the role of
 #' vice-captain.
 #'
-#' @return the team_selection object with the new role assigned
+#' @return the team object with the new role assigned
 assign_role <- function(team,
                         pid,
                         role = 'c') {
 
   # Check initial arguments
-  if (!is_team_selection(team)) cli::cli_abort("{.fun assign_role} can only be used with an object of class {.cls team_selection}")
+  if (!is_team(team)) cli::cli_abort("{.fun assign_role} can only be used with an object of class {.cls team}")
   if (!is.numeric(pid)|length(pid) != 1) cli::cli_abort("{.arg pid} must be a single numeric player ID")
   if (!role %in% c("c", "vc")) cli::cli_abort("{.arg role} must be one of 'c' or 'vc'")
 
@@ -178,21 +178,21 @@ assign_role <- function(team,
   team
 }
 
-#' Summarise the difference between two team_selection objects
+#' Summarise the difference between two team objects
 #'
-#' Take in two team_selection objects and summarise the changes between the two,
+#' Take in two team objects and summarise the changes between the two,
 #' with the changes being printed to the console.
 #'
-#' @param previous the previous team_selection object
-#' @param current the current team_selection object
+#' @param previous the previous team object
+#' @param current the current team object
 #'
 #' @return prints information to the console on the differences between the two teams
 summarise_team_changes <- function(previous,
                                    current) {
 
   # Check argument types
-  if (!is_team_selection(previous)) cli::cli_abort("{.arg previous} must be an object of class {.cls team_selection}")
-  if (!is_team_selection(current)) cli::cli_abort("{.arg current} must be an object of class {.cls team_selection}")
+  if (!is_team(previous)) cli::cli_abort("{.arg previous} must be an object of class {.cls team}")
+  if (!is_team(current)) cli::cli_abort("{.arg current} must be an object of class {.cls team}")
 
   # List transfers
   transfers_in <- current$id[!current$id %in% previous$id]
@@ -202,7 +202,7 @@ summarise_team_changes <- function(previous,
   subs_in <- current$id[current$id %in% attr(current, "submission_order")[1:11] & !current$id %in% attr(previous, "submission_order")[1:11]]
   subs_out <- previous$id[previous$id %in% attr(previous, "submission_order")[1:11] & !previous$id %in% attr(current, "submission_order")[1:11]]
 
-  cli::cli_alert_info("Squad changes:")
+  cli::cli_alert_info("Team changes:")
 
   # Print information on transfers
   if (length(transfers_in)) {

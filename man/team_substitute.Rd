@@ -7,7 +7,7 @@
 team_substitute(team, p1, p2)
 }
 \arguments{
-\item{team}{an object with class team_selection}
+\item{team}{an object with class team}
 
 \item{p1}{a numeric ID of a player in the team}
 

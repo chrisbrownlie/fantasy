@@ -17,5 +17,5 @@ saves the users authentication token to options("FANTASY_COOKIE")
 \description{
 Use a supplied login email and password to get the necessary authentication
 cookie to allow a user to get information about and update their team. The
-value of the resulting cookie
+value of the resulting cookie is saved for the session to options("FANTASY_COOKIE")
 }

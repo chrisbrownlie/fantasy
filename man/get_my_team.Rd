@@ -11,7 +11,7 @@ get_my_team(manager_id)
 not need to be supplied once you have logged in using authenticate()}
 }
 \value{
-an object of class team_selection, representing your current team
+an object of class team, representing your current team
 }
 \description{
 Get current fantasy premier league team for a manager

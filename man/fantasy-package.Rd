@@ -6,7 +6,14 @@
 \alias{fantasy-package}
 \title{fantasy: Fantasy Premier League API Wrapper}
 \description{
-Functions for interacting with the Fantasy Premier League API, enabling extraction of data as well as automated updating of team selections.
+Functions for interacting with the Fantasy Premier League API, enabling extraction of data as well as automated updating of teams.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://chrisbrownlie.github.io/fantasy/}
+}
+
 }
 \author{
 \strong{Maintainer}: Chris Brownlie \email{chris.brownlie@hotmail.co.uk}

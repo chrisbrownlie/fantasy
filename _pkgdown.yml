@@ -1,0 +1,14 @@
+url: https://chrisbrownlie.github.io/fantasy/
+template:
+  bootstrap: 5
+  bootswatch: lumen
+  bslib:
+    primary: "#8b66b3"
+    navbar-dark-color: "#ffffff"
+
+navbar:
+    bg: primary
+    type: dark
+    structure:
+      left:  [intro, articles, reference, news]
+      right: [search, github]

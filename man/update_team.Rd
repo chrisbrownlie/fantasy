@@ -7,11 +7,11 @@
 update_team(team, verbose = 0, report_changes = TRUE)
 }
 \arguments{
-\item{team}{either an object with class team_selection, or a list of length
+\item{team}{either an object with class team, or a list of length
 three with the following positional elements: (1) a numeric vector of length
 15 indicating the 15 player IDs of the team; (2) a single numeric ID of the
 captain; (3) a single numeric ID of the vice-captain.
-If a list is supplied, it will be converted to a team_selection object first
+If a list is supplied, it will be converted to a team object first
 before the update request is sent.}
 
 \item{verbose}{an integer from 0 to 3 denoting how verbose the request should be -

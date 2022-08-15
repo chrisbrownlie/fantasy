@@ -83,13 +83,13 @@ get_player_summary <- function(player_id) {
   player_team <- get_players() |>
     filter(id == player_id) |>
     pull(team) |>
-    team_abbr()
+    team_from_id()
 
   future_fixtures <- player_summary$fixtures |>
     bind_rows() |>
     mutate(element_id = player_id,
-           team_h = team_abbr(team_h),
-           team_a = team_abbr(team_a),
+           team_h = team_from_id(team_h),
+           team_a = team_from_id(team_a),
            kickoff_time = as.POSIXct(kickoff_time)) |>
     rename(fixture_id = id,
            at_home = is_home,
@@ -97,8 +97,8 @@ get_player_summary <- function(player_id) {
 
   played_fixtures <- player_summary$history |>
     bind_rows() |>
-    mutate(team_h = if_else(was_home, player_team, team_abbr(opponent_team)),
-           team_a = if_else(was_home, team_abbr(opponent_team), player_team),
+    mutate(team_h = if_else(was_home, player_team, team_from_id(opponent_team)),
+           team_a = if_else(was_home, team_from_id(opponent_team), player_team),
            kickoff_time = as.POSIXct(kickoff_time)) |>
     rename(element_id = element,
            fixture_id = fixture,
@@ -120,4 +120,37 @@ get_player_summary <- function(player_id) {
            difficulty,
            minutes:transfers_out)
 
+}
+
+
+#' Convert player ID to name
+#'
+#' @param id the player id, an integer
+#' @param full if TRUE return the full name, if FALSE
+#' (the default), return the 'known as' name
+#'
+#' @return a string representing a player name
+player_from_id <- function(id, full = FALSE) {
+  players <- get_players()
+  single_player <- function(pl_id, plyrs, fll) {
+    if (fll) {
+      plyrs$name[plyrs$id == pl_id]
+    } else {
+      plyrs$known_as[plyrs$id == pl_id]
+    }
+  }
+  if (length(id) > 1) {
+    invalid <- id[!id %in% players$id]
+    if (!length(invalid)) {
+      purrr::map_chr(id, single_player, plyrs = players, fll = full)
+    } else if (length(invalid)==1) {
+      cli::cli_abort("There is no player with ID {.val {id}}")
+    } else if (length(invalid < 10)) {
+      cli::cli_abort("There are no players with the following IDs: {{paste(id, collapse = ';')}}")
+    } else {
+      cli::cli_abort("Many of the player IDs you have supplied are invalid")
+    }
+  } else {
+    single_player(id, plyrs = players, fll = full)
+  }
 }

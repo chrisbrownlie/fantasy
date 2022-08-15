@@ -1,37 +1,37 @@
-#' Construct new team selection
+#' Construct new team object
 #'
 #' @param players a numeric vector of 15 player IDs
 #' @param captain the ID of the teams captain
 #' @param vc the ID of the teams vice captain
 #'
-#' @return a new tibble of class team_selection
-new_team_selection <- function(players,
+#' @return a new tibble of class team
+new_team <- function(players,
                                captain,
                                vc) {
 
-  # Create new team_selection object
+  # Create new team object
   tibble::new_tibble(
     tibble::as_tibble_col(players, column_name = "id"),
     captain = captain,
     vc = vc,
     submission_order = players,
-    class = "team_selection"
+    class = "team"
   )
 }
 
-#' Validate new team selection
+#' Validate new team object
 #'
-#' @param x an object of class team_selection
+#' @param x an object of class team
 #'
-#' @return the input team_selection object, or throws an error if the
-#' selection is not valid.
-validate_team_selection <- function(x) {
+#' @return the input team object, or throws an error if the
+#' object is not valid.
+validate_team <- function(x) {
 
   # 15 players
-  if (nrow(x)!=15) cli::cli_abort("Team selections must be length 15 (11 starting players and 4 subs)")
+  if (nrow(x)!=15) cli::cli_abort("Teams must consist of 15 players (11 starting players and 4 subs)")
 
   # Only valid players allowed (name will be NA for invalid players because of the
-  # left_join in team_selection())
+  # left_join in team())
   if (any(is.na(x$name))) {
     cli::cli_abort(paste0("Some of the IDs you have selected are not valid player IDs. Invalid IDs: ",
                           paste(x$id[is.na(x$name)], collapse = "; ")))
@@ -41,25 +41,25 @@ validate_team_selection <- function(x) {
   if (!is.numeric(attr(x, "captain"))) cli::cli_abort("Captain must be single numeric ID")
   if (length(attr(x, "captain")) == 0) cli::cli_abort("A captain must be selected")
   if (length(attr(x, "captain")) > 1) cli::cli_abort("Only one captain can be selected")
-  if (!attr(x, "captain") %in% x$id) cli::cli_abort("Selected captain is not one of the players in the squad")
+  if (!attr(x, "captain") %in% x$id) cli::cli_abort("Selected captain is not one of the players in the team")
 
   # Check a single valid vice-captain has been selected
   if (!is.numeric(attr(x, "vc"))) cli::cli_abort("Vice-captain must be single numeric ID")
   if (length(attr(x, "vc")) == 0) cli::cli_abort("A vice-captain must be selected")
   if (length(attr(x, "vc")) > 1) cli::cli_abort("Only one vice-captain can be selected")
-  if (!attr(x, "vc") %in% x$id) cli::cli_abort("Selected vice-captain is not one of the players in the squad")
+  if (!attr(x, "vc") %in% x$id) cli::cli_abort("Selected vice-captain is not one of the players in the team")
 
   # Check the number of players of each position is valid
-  if (sum(x$position == "GKP") != 2) cli::cli_abort(paste0("You must select two goalkeepers in your squad, you currently have ",
+  if (sum(x$position == "GKP") != 2) cli::cli_abort(paste0("You must select two goalkeepers in your team, you currently have ",
                                                            sum(x$position == "GKP"), ": ", paste(x$known_as[x$position == "GKP"],
                                                                                                  collapse = "; ")))
-  if (sum(x$position == "DEF") != 5) cli::cli_abort(paste0("You must select five defenders in your squad, you currently have ",
+  if (sum(x$position == "DEF") != 5) cli::cli_abort(paste0("You must select five defenders in your team, you currently have ",
                                                            sum(x$position == "DEF"), ": ", paste(x$known_as[x$position == "DEF"],
                                                                                                  collapse = "; ")))
-  if (sum(x$position == "MID") != 5) cli::cli_abort(paste0("You must select five midfielders in your squad, you currently have ",
+  if (sum(x$position == "MID") != 5) cli::cli_abort(paste0("You must select five midfielders in your team, you currently have ",
                                                            sum(x$position == "MID"), ": ", paste(x$known_as[x$position == "MID"],
                                                                                                  collapse = "; ")))
-  if (sum(x$position == "FWD") != 3) cli::cli_abort(paste0("You must select three forwards in your squad, you currently have ",
+  if (sum(x$position == "FWD") != 3) cli::cli_abort(paste0("You must select three forwards in your team, you currently have ",
                                                            sum(x$position == "FWD"), ": ", paste(x$known_as[x$position == "FWD"],
                                                                                                  collapse = "; ")))
 
@@ -67,7 +67,7 @@ validate_team_selection <- function(x) {
   teams <- count(x, team)
   if (any(teams$n>3)) cli::cli_abort(paste0("You can only select a maximum of three players from any one club. ",
                                             "You have selected more than three players from the following club(s): ",
-                                            paste(team_abbr(teams$team[teams$n>3], T), collapse = "; ")))
+                                            paste(team_from_id(teams$team[teams$n>3], T), collapse = "; ")))
 
   # Ensure team is in submission order for remaining checks
   x <- x[match(attr(x, "submission_order"), x$id),]
@@ -97,26 +97,26 @@ validate_team_selection <- function(x) {
 }
 
 
-#' Create a new team selection and validate it
+#' Create a new team object and validate it
 #'
 #' This function takes in 15 player IDs and a captain/vice-captain designation,
 #' enriches this into a tibble with information on each player, then validates
 #' this against a set of criteria to ensure the selected 15 is valid. It then
-#' returns the enriched tibble as an object of class team_selection
+#' returns the enriched tibble as an object of class team
 #'
 #' @param players a numeric vector of length 15 indicating 15 player IDs
 #' @param captain a numeric value indicating the ID of the team's captain
 #' @param vc a numeric value indicating the ID of the team's vice-captain
 #'
-#' @return a vector with class team_selection
+#' @return a vector with class team
 #'
 #' @export
-team_selection <- function(players,
+team <- function(players,
                            captain,
                            vc) {
 
-  # Create new raw team selection tibble
-  team_selection <- new_team_selection(players = players,
+  # Create new raw team object tibble
+  team <- new_team(players = players,
                                        captain = captain,
                                        vc = vc)
 
@@ -124,7 +124,7 @@ team_selection <- function(players,
   valid_players <- get_players()
 
   # Enrich raw selection with players info
-  enriched_selection <- team_selection |>
+  enriched_selection <- team |>
     left_join(valid_players, by = "id") |>
     mutate(position = ordered(position, levels = c("GKP", "DEF", "MID", "FWD")),
            team_position = row_number()) |>
@@ -143,14 +143,14 @@ team_selection <- function(players,
 
   # Validate selection (this potentially changes the order of the players)
   # and return
-  validate_team_selection(enriched_selection)
+  validate_team(enriched_selection)
 }
 
-#' Format function for team selection
+#' Format function for team object
 #' @export
-print.team_selection <- function(x, ...) {
+print.team <- function(x, ...) {
 
-  # If selection is enriched, print nicely
+  # If team is enriched, print nicely
   if (all(c("known_as", "position", "points_total") %in% names(x))) {
 
     # Ensure team is in submission order for printing
@@ -172,7 +172,7 @@ print.team_selection <- function(x, ...) {
     starting_mids <- paste(selection$sel_string[1:11][selection$position[1:11]=="MID"], collapse = ";  ")
     starting_fwds <- paste(selection$sel_string[1:11][selection$position[1:11]=="FWD"], collapse = ";  ")
     benched <- paste(selection$sel_string[12:15], collapse = "; ")
-    cli::cli_alert_info("Team selection:")
+    cli::cli_alert_info("Team:")
     cli::cli_bullets(paste0("GKP: ", starting_gkp))
     cli::cli_bullets(paste0("DEF: ", starting_defs))
     cli::cli_bullets(paste0("MID: ", starting_mids))
@@ -180,10 +180,10 @@ print.team_selection <- function(x, ...) {
     cli::cli_bullets(paste0("(Bench): ", benched))
   } else {
     # If selection is not enriched, print simply
-    cli::cli_alert_info("Team selection (IDs only):")
+    cli::cli_alert_info("Team (IDs only):")
     cli::cli_bullets(paste(x$id, collapse = "; "))
   }
 }
 
-#' Is this object a team selection?
-is_team_selection <- function(x) inherits(x, "team_selection")
+#' Is this object a team object?
+is_team <- function(x) inherits(x, "team")

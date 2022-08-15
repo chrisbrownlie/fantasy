@@ -1,10 +1,10 @@
-test_that("team_selection constructor works", {
+test_that("team constructor works", {
 
-  new_team <- new_team_selection(1:15,
+  new_team <- new_team(1:15,
                                  8,
                                  9)
 
-  expect_s3_class(new_team, "team_selection")
+  expect_s3_class(new_team, "team")
   expect_named(new_team, "id")
   expect_equal(nrow(new_team), 15)
   expect_equal(ncol(new_team), 1)
@@ -13,15 +13,15 @@ test_that("team_selection constructor works", {
   expect_equal(attr(new_team, "submission_order"), 1:15)
 })
 
-test_that("team_selection helper/validator works with known valid team", {
+test_that("team helper/validator works with known valid team", {
 
   valid_team_ids <- c(15, 430, 299, 10, 280, 283, 428, 305, 370, 465, 255, 398, 199, 391, 166)
 
-  valid_team <- team_selection(players = valid_team_ids,
+  valid_team <- team(players = valid_team_ids,
                                captain = valid_team_ids[8],
                                vc = valid_team_ids[9])
 
-  expect_s3_class(valid_team, "team_selection")
+  expect_s3_class(valid_team, "team")
   expect_named(valid_team, c("id", "name", "known_as", "position", "team", "points", "points_total", "form", "cost"))
   expect_equal(nrow(valid_team), 15)
   expect_equal(attr(valid_team, "captain"), 305)
@@ -29,7 +29,7 @@ test_that("team_selection helper/validator works with known valid team", {
   expect_equal(attr(valid_team, "submission_order"), valid_team_ids)
 })
 
-test_that("team_selection helper/validator works with random valid team", {
+test_that("team helper/validator works with random valid team", {
 
   players <- get_players()
 
@@ -55,11 +55,11 @@ test_that("team_selection helper/validator works with random valid team", {
                        fwds2)
 
 
-  valid_team <- team_selection(players = random_team_ids,
+  valid_team <- team(players = random_team_ids,
                                captain = random_team_ids[8],
                                vc = random_team_ids[9])
 
-  expect_s3_class(valid_team, "team_selection")
+  expect_s3_class(valid_team, "team")
   expect_named(valid_team, c("id", "name", "known_as", "position", "team", "points", "points_total", "form", "cost"))
   expect_equal(nrow(valid_team), 15)
   expect_equal(attr(valid_team, "captain"), random_team_ids[8])
@@ -67,7 +67,7 @@ test_that("team_selection helper/validator works with random valid team", {
   expect_equal(attr(valid_team, "submission_order"), random_team_ids)
 })
 
-test_that("team_selection helper/validator fails with invalid teams", {
+test_that("team helper/validator fails with invalid teams", {
 
   players <- get_players()
 
@@ -85,16 +85,16 @@ test_that("team_selection helper/validator fails with invalid teams", {
                        mids[5],
                        fwds[3])
 
-  # Incorrect squad positions
+  # Incorrect team positions
   expect_error(
-    team_selection(players = keepers,
+    team(players = keepers,
                    captain = keepers[1],
                    vc = keepers[2]),
     regexp = "must select two goalkeepers"
   )
   # Incorrect starting XI positions
   expect_error(
-    team_selection(players = c(keepers[1],
+    team(players = c(keepers[1],
                                defs[1:5],
                                mids[1:5],
                                keepers[2],
@@ -105,24 +105,24 @@ test_that("team_selection helper/validator fails with invalid teams", {
   )
   # Not 15 players
   expect_error(
-    team_selection(players = valid_team_ids[1:14],
+    team(players = valid_team_ids[1:14],
                    captain = valid_team_ids[2],
                    vc = valid_team_ids[7]),
     regexp = "must be length 15"
   )
   # Captain not in team
   expect_error(
-    team_selection(players = valid_team_ids,
+    team(players = valid_team_ids,
                    captain = keepers[3],
                    vc = valid_team_ids[7]),
-    regexp = "captain is not one of the players in the squad"
+    regexp = "captain is not one of the players in the team"
   )
   # Vice-captain not in team
   expect_error(
-    team_selection(players = valid_team_ids,
+    team(players = valid_team_ids,
                    captain = valid_team_ids[1],
                    vc = defs[15]),
-    regexp = "vice-captain is not one of the players in the squad"
+    regexp = "vice-captain is not one of the players in the team"
   )
   # Too many players from one team
   arsenal <- players %>% filter(team == 1)
@@ -136,7 +136,7 @@ test_that("team_selection helper/validator fails with invalid teams", {
                   arsenal$id[arsenal$position == "MID"][5],
                   villa$id[villa$position == "FWD"][3])
   expect_error(
-    team_selection(players = mixed_team,
+    team(players = mixed_team,
                    captain = mixed_team[1],
                    vc = mixed_team[11]),
     regexp = "maximum of three players from any one club"

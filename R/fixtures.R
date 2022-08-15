@@ -35,10 +35,10 @@ get_fixture_list <- function() {
               finished,
               kickoff_time = as.POSIXct(kickoff_time),
               minutes,
-                     home_team = team_abbr(team_h),
+                     home_team = team_from_id(team_h),
                      home_score = team_h_score,
                      home_difficulty = team_h_difficulty,
-                     away_team = team_abbr(team_a),
+                     away_team = team_from_id(team_a),
                      away_score = team_a_score,
                      away_difficulty = team_a_difficulty)
 
@@ -89,7 +89,7 @@ format_stat <- function(stat) {
                                 tibble::as_tibble_row) |>
       transmute(
         team = "home",
-        player = element,
+        player = player_from_id(element),
         value
       )
   } else {
@@ -100,7 +100,7 @@ format_stat <- function(stat) {
                                 tibble::as_tibble_row) |>
       transmute(
         team = "away",
-        player = element,
+        player = player_from_id(element),
         value
       )
   } else {
