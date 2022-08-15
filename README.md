@@ -12,12 +12,12 @@ available from the API, as well as enabling actions such as transfers
 and team changes to be enacted programmatically.
 
 After authenticating, the package provides a new class of object
-(`team`) that takes care of all the various restrictions on a team, so
+(`<team>`) that takes care of all the various restrictions on a team, so
 you can simply make transfers and substitutions and the package will
 notify you if they are not valid (e.g. more than 3 players from 1 club,
-not enough of a certain position in your team/starting XI, if a
-transfer exceeds your budget etc.). The `<team>` class also enables
-pretty printing of a team (see usage below).
+not enough of a certain position in your team/starting XI, if a transfer
+exceeds your budget etc.). The `<team>` class also enables pretty
+printing of a team (see usage below).
 
 It maintains a tidyverse-like style, with all functions returning
 tibbles with readable column names. The package also provides helper
@@ -25,9 +25,12 @@ functions for obtaining data from other useful sources, such as
 predicted team lineups from fantasyfootballscout.co.uk or relevant
 tweets from twitter.
 
+See [the package site](https://chrisbrownlie.github.io/fantasy/) for
+more details.
+
 ## Installation
 
-You can install the development version of fantasy from
+You can install the development version of {fantasy} from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -43,22 +46,22 @@ Premier League API:
 -   [fplR](https://ewenme.github.io/fplr/)
 -   [fplscrapR](https://wiscostret.github.io/fplscrapR/)
 
-The reasons for building this new package are because the two packages
-above:
+The reasons for building {fantasy} are because the two packages above:
 
 -   Are not regularly maintained, and so may not work with the current
     (2022/23) version of the FPL API,
 -   Do not implement authentication, so cannot be used to perform
-    actions and retrieve private user information, or
+    actions and retrieve private user information, and
 -   Are not built using {httr2} and so do not benefit from some of its
     functionality.
 
-{fantasy} aims to address all three of these restrictions.
+{fantasy} aims to address all three of these.
 
 ## Usage
 
 Below are some examples of how to use the key functions in the package.
-See the package site for more detailed information and examples.
+See the [{fantasy} site](https://chrisbrownlie.github.io/fantasy/) for
+more detailed information and examples.
 
 ``` r
 library(fantasy)
@@ -194,18 +197,18 @@ authenticate()
 
 # See your team
 get_my_team()
-#> ℹ Team selection:
+#> ℹ Team:
 #> GKP: 15-Ramsdale
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
 #> MID: 283-Salah (C); 428-Son (VC); 305-Grealish; 370-S.Longstaff; 465-Bowen
 #> FWD: 255-Vardy
-#> (Bench): 398-Henderson; 199-Tarkowski; 391-Surridge; 166-Edouard
+#> (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge
 
 # Swap two players in your team
 # - {fantasy} will automatically handle any restrictions or reordering of your team
 get_my_team() |>
   team_substitute(p1 = 465, p2 = 166)
-#> ℹ Team selection:
+#> ℹ Team:
 #> GKP: 15-Ramsdale
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
 #> MID: 283-Salah (C); 428-Son (VC); 305-Grealish; 370-S.Longstaff
@@ -216,13 +219,28 @@ get_my_team() |>
 get_my_team() |>
   assign_role(pid = 255, role = "c") |>
   assign_role(pid = 15, role = "vc")
-#> ℹ Team selection:
+#> ℹ Team:
 #> GKP: 15-Ramsdale (VC)
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
 #> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff; 465-Bowen
 #> FWD: 255-Vardy (C)
-#> (Bench): 398-Henderson; 199-Tarkowski; 391-Surridge; 166-Edouard
+#> (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge
 
+# After making any changes, update your team on the FPL site
+get_my_team() |>
+  team_substitute(p1 = 465, p2 = 166)|>
+  assign_role(pid = 255, role = "c") |>
+  assign_role(pid = 15, role = "vc") |>
+  update_team()
+#> → Creating payload...
+#> → Sending POST request...
+#> ✔ Team update successful!
+#> ℹ Team changes:
+#> ─ No transfers.
+#> ↑Subs In: Edouard (FWD)
+#> ↓Subs Out: Bowen (MID)
+#> ◉ Captain: Salah -> Vardy
+#> ◎ Vice-Captain: Son -> Ramsdale
 
 ### Non-FPL API functions
 # Get predicted lineups from fantasyfootballscout.co.uk

@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 {fantasy} is a wrapper for the Fantasy Premier League API. It provides a clean, intuitive set of functions to extract all the key data that is available from the API, as well as enabling actions such as transfers and team changes to be enacted programmatically. 
 
-After authenticating, the package provides a new class of object (`team`) that takes care of all the various restrictions on a team, so you can simply make transfers and substitutions and the package will notify you if they are not valid (e.g. more than 3 players from 1 club, not enough of a certain position in your team/starting XI, if a transfer exceeds your budget etc.). The `<team>` class also enables pretty printing of a team (see usage below).
+After authenticating, the package provides a new class of object (`<team>`) that takes care of all the various restrictions on a team, so you can simply make transfers and substitutions and the package will notify you if they are not valid (e.g. more than 3 players from 1 club, not enough of a certain position in your team/starting XI, if a transfer exceeds your budget etc.). The `<team>` class also enables pretty printing of a team (see usage below).
 
 It maintains a tidyverse-like style, with all functions returning tibbles with readable column names. The package also provides helper functions for obtaining data from other useful sources, such as predicted team lineups from fantasyfootballscout.co.uk or relevant tweets from twitter.
 
@@ -28,7 +28,7 @@ See [the package site](https://chrisbrownlie.github.io/fantasy/) for more detail
 
 ## Installation
 
-You can install the development version of fantasy from [GitHub](https://github.com/) with:
+You can install the development version of {fantasy} from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -41,7 +41,7 @@ There already exists at least two R packages that wrap the Fantasy Premier Leagu
 - [fplR](https://ewenme.github.io/fplr/)
 - [fplscrapR](https://wiscostret.github.io/fplscrapR/)
 
-The reasons for building this new package are because the two packages above:
+The reasons for building {fantasy} are because the two packages above:
 
 - Are not regularly maintained, and so may not work with the current (2022/23) version of the FPL API,
 - Do not implement authentication, so cannot be used to perform actions and retrieve private user information, and
@@ -90,6 +90,12 @@ get_my_team() |>
   assign_role(pid = 255, role = "c") |>
   assign_role(pid = 15, role = "vc")
 
+# After making any changes, update your team on the FPL site
+get_my_team() |>
+  team_substitute(p1 = 465, p2 = 166)|>
+  assign_role(pid = 255, role = "c") |>
+  assign_role(pid = 15, role = "vc") |>
+  update_team()
 
 ### Non-FPL API functions
 # Get predicted lineups from fantasyfootballscout.co.uk

@@ -219,12 +219,12 @@ summarise_team_changes <- function(previous,
 
   # Print information on substitutions
   if (length(subs_in)) {
-    subin <- paste(cli::col_yellow(current$known_as[current$id %in% subs_in]), collapse = "; ")
+    subin <- paste(paste0(cli::col_yellow(current$known_as[current$id %in% subs_in]), " (", cli::col_blue(current$position[current$id %in% subs_in]), ")"), collapse = "; ")
     cli::cli_text(paste0("{cli::symbol$arrow_up}", cli::col_cyan("Subs In: "), subin))
   }
   if (length(subs_out)) {
-    subout <- paste(cli::col_yellow(current$known_as[current$id %in% subs_out]), collapse = "; ")
-    cli::cli_text(paste0("{cli::symbol$arrow_down}", cli::col_cyan("Subs In: "), subout))
+    subout <- paste(paste0(cli::col_yellow(current$known_as[current$id %in% subs_out]), " (", cli::col_blue(current$position[current$id %in% subs_out]), ")"), collapse = "; ")
+    cli::cli_text(paste0("{cli::symbol$arrow_down}", cli::col_cyan("Subs Out: "), subout))
   }
   if (!length(subs_in) & !length(subs_out)) {
     cli::cli_text("{cli::symbol$line} No substitutes.")
