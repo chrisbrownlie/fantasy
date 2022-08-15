@@ -10,9 +10,9 @@ get_teams <- function() {
 
   # Get teams
   general$teams |>
-    dplyr::bind_rows() |>
+    bind_rows() |>
     # Rename id col
-    dplyr::rename(team_id = id)
+    rename(team_id = id)
 }
 
 
@@ -25,7 +25,7 @@ get_teams <- function() {
 #' @return a string representing a team name
 team_abbr <- function(id, full = FALSE) {
   teams <- get_teams() |>
-    dplyr::arrange(team_id) |>
-    dplyr::pull(dplyr::all_of(ifelse(full, "name", "short_name")))
+    arrange(team_id) |>
+    pull(all_of(ifelse(full, "name", "short_name")))
   teams[id]
 }

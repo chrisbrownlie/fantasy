@@ -30,16 +30,16 @@ get_predicted_lineups <- function() {
     bind_rows() |>
     mutate(across(everything(), ~paste0(row_number(), .x))) |>
     tidyr::pivot_longer(everything(),
-                        names_to = "Team",
-                        values_to = "Player") %>%
-    mutate(Selection = as.numeric(gsub(pattern = "^(\\d+).*",
+                        names_to = "team",
+                        values_to = "player") %>%
+    mutate(selection = as.numeric(gsub(pattern = "^(\\d+).*",
                             replacement = "\\1",
-                            Player)),
-           Player = gsub(pattern = "^\\d+(.*)",
+                            player)),
+           player = gsub(pattern = "^\\d+(.*)",
                          replacement = "\\1",
-                         Player)) |>
-    select(Team, Selection, Player) |>
-    arrange(Team, Selection)
+                         player)) |>
+    select(team, selection, player) |>
+    arrange(team, selection)
 
   lineups
 }

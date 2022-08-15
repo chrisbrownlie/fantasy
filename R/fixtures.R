@@ -52,6 +52,8 @@ get_fixture_list <- function() {
 #' the default, then all fixtures' stats are returned.
 #'
 #' @return a dataframe with columns 'id', 'stat', 'team', 'player' and 'value'
+#'
+#' @export
 get_fixture_stats <- function(fixture_id = NULL) {
 
   # Query API or cache

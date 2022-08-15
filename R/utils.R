@@ -14,9 +14,13 @@ construct <- function(endpoint) {
 #' Query an API endpoint. Lightweight wrapper round httr2 funcs
 #'
 #' @param endpoint_url the URL to query
+#' @param ... any headers to assign to the request
+#' @param type one of the 'json', 'html' or 'string'. How the content
+#' of the response should be returned
 #'
 #' @return a list
 perform_query <- function(endpoint_url,
+                          ...,
                           type = "json") {
 
   # Check valid type
@@ -24,6 +28,8 @@ perform_query <- function(endpoint_url,
 
   # Query API
   response <- httr2::request(endpoint_url) |>
+    httr2::req_retry(max_tries = getOption("FANTASY_MAX_RETRIES", default = 3)) |>
+    httr2::req_headers(...) |>
     httr2::req_perform()
 
   # Extract content

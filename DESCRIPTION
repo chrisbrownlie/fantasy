@@ -2,7 +2,7 @@ Package: fantasy
 Title: Fantasy Premier League API Wrapper
 Version: 0.0.0.9000
 Authors@R: 
-    person("Chris", "Brownlie", "chris.brownlie@hotmail.co.uk", role = c("aut", "cre"))
+    person(given = "Chris", family = "Brownlie", email = "chris.brownlie@hotmail.co.uk", role = c("aut", "cre"))
 Description: Functions for interacting with the Fantasy Premier League API, enabling 
   extraction of data as well as automated updating of team selections.
 License: MIT + file LICENSE
@@ -11,6 +11,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Imports:
   httr2,
+  httr,
   tibble,
   dplyr,
   memoise,
@@ -18,3 +19,6 @@ Imports:
   purrr,
   rvest,
   rstudioapi
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

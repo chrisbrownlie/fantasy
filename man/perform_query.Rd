@@ -4,10 +4,15 @@
 \alias{perform_query}
 \title{Perform API query}
 \usage{
-perform_query(endpoint_url)
+perform_query(endpoint_url, ..., type = "json")
 }
 \arguments{
 \item{endpoint_url}{the URL to query}
+
+\item{...}{any headers to assign to the request}
+
+\item{type}{one of the 'json', 'html' or 'string'. How the content
+of the response should be returned}
 }
 \value{
 a list

@@ -14,8 +14,28 @@ authenticate <- function(email,
                          password) {
 
   # If inputs are missing and use is interactive, ask for inputs
-  if (missing(email)&interactive()) email <- rstudioapi::showPrompt(title = "Login", message = "Enter your FPL email address:")
-  if (missing(password)&interactive()) password <- rstudioapi::askForPassword(prompt = "Enter your FPL password:")
+  if (missing(email)) {
+    if (Sys.getenv("FPL_EMAIL") == "") {
+      if (interactive()) {
+        email <- rstudioapi::showPrompt(title = "Login", message = "Enter your FPL email address:")
+      } else {
+        cli::cli_abort("{.arg email} must be supplied")
+      }
+    } else {
+      email <- Sys.getenv("FPL_EMAIL")
+    }
+  }
+  if (missing(password)) {
+    if (Sys.getenv("FPL_PASSWORD") == "") {
+      if (interactive()) {
+        password <- rstudioapi::askForPassword(prompt = "Enter your FPL password:")
+      } else {
+        cli::cli_abort("{.arg password} must be supplied")
+      }
+    } else {
+      password <- Sys.getenv("FPL_PASSWORD")
+    }
+  }
 
   # Send a login request to get the cookie required for authentication
   cli::cli_alert_info(paste0("Sending login request for user ", cli::col_magenta(email), "..."))
@@ -61,6 +81,10 @@ authenticate <- function(email,
 
   options("FANTASY_COOKIE" = profile_cookie)
   cli::cli_alert_success("Authentication successful!")
+
+  # Identify user manager ID and save for later use
+  identify()
+
   invisible()
 }
 
@@ -74,4 +98,24 @@ authenticate <- function(email,
 #' @return throws an error if no valid cookie has been stored
 require_authentication <- function() {
   if (!length(getOption("FANTASY_COOKIE"))) cli::cli_abort("You need to login using {.fun authenticate} first.")
+}
+
+#' Get a logged in users manager ID and save to environment variable
+#'
+#' @return saves the users manager ID to the environment variable FPL_MANAGER_ID
+identify <- function() {
+
+  # Check that user is authenticated
+  require_authentication()
+
+  # User info endpoint
+  user_ep <- construct("me/")
+
+  # Query the endpoint
+  user_info <- perform_query(user_ep,
+                             Cookie = paste0("pl_profile=", getOption("FANTASY_COOKIE")),
+                             type = "json")
+
+  # Save users manager ID to environment variable
+  Sys.setenv("FPL_MANAGER_ID" = user_info$player$entry)
 }

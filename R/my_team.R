@@ -1,13 +1,18 @@
 #' Get my team
 #'
-#' Get dataframe of my current team
+#' Get current fantasy premier league team for a manager
 #'
-#' @param manager_id the manager ID of the team to show
+#' @param manager_id the manager ID of the team to show - this does
+#' not need to be supplied once you have logged in using authenticate()
 #'
-#' @return tibble of information about current picks
+#' @return an object of class team_selection, representing your current team
 #'
 #' @export
-get_my_team <- function(manager_id = 7330951) {
+get_my_team <- function(manager_id) {
+
+  # If manager_id ommitted, check
+  if (missing(manager_id)) manager_id <- Sys.getenv("FPL_MANAGER_ID")
+  if (manager_id == "") cli::cli_abort("Must supply a manager ID or login using {.fun authenticate}")
 
   # Check authentication
   require_authentication()
@@ -16,71 +21,69 @@ get_my_team <- function(manager_id = 7330951) {
   my_team_ep <- construct(paste0("my-team/", manager_id, "/"))
 
   # Get team data
-  rep <- httr2::request(my_team_ep) |>
-    httr2::req_headers(
-      "Cookie" = paste0("pl_profile=", getOption("FANTASY_COOKIE"))
-    ) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json()
+  rep <- perform_query(my_team_ep,
+                       Cookie = paste0("pl_profile=", getOption("FANTASY_COOKIE")),
+                       type = "json")
 
-  players <- get_players()
-
-  rep$picks |>
+  raw_team <- rep$picks |>
     bind_rows() |>
-    left_join(players,
-              by = c("element" = "id")) |>
-    transmute(id = element,
-              team_position = position.x,
-              name,
-              known_as,
-              team = team_abbr(team, T),
-              points,
-              points_total,
-              form,
-              position = position.y,
-              selling_price,
-              multiplier,
-              purchase_price,
-              is_captain,
-              is_vice_captain)
+    arrange(position) |>
+    select(id = element,
+           is_captain,
+           is_vice_captain)
+
+  # Convert to team_selection object and return
+  team_selection(raw_team$id,
+                 captain = raw_team$id[raw_team$is_captain],
+                 vc = raw_team$id[raw_team$is_vice_captain])
 }
 
 #' Update your team
 #'
-#' Send a request to the API to update your team details
+#' Send a request to the API to update a team.
 #'
-#' @param player_ids a numeric vector of player IDs, ordered in
-#' their desired squad positions 1-15
-#' @param captain_position_id number from 1-11. The *position* ID
-#' of your desired captain (e.g. 1 would set your GK to captain)
-#' @param vc_position_id number from 1-11. The *position* ID of your
-#' desired vice-captain.
+#' @param team either an object with class team_selection, or a list of length
+#' three with the following positional elements: (1) a numeric vector of length
+#' 15 indicating the 15 player IDs of the team; (2) a single numeric ID of the
+#' captain; (3) a single numeric ID of the vice-captain.
+#' If a list is supplied, it will be converted to a team_selection object first
+#' before the update request is sent.
+#' @param verbose an integer from 0 to 3 denoting how verbose the request should be -
+#' passed to httr2::req_perform (0 = no output, 3 = maximum output)
+#' @param report_changes logical - should the overall changes to the team be
+#' summarised and printed to the console?
 #'
-#' @return informs the user whether the request was successful or not
+#' @return informs the user whether the update request was successful or not
 #'
 #' @export
-update_team <- function(player_ids,
-                        captain_position_id,
-                        vc_position_id,
-                        verbose = 0) {
+update_team <- function(team,
+                        verbose = 0,
+                        report_changes = TRUE) {
+  UseMethod("update_team")
+}
+
+#' @export
+update_team.team_selection <- function(team,
+                                       verbose = 0,
+                                       report_changes = TRUE) {
 
   # Check authentication
   require_authentication()
 
   # Validate inputs
-  validated <- validate_team_selection(player_ids,
-                                       captain_position_id,
-                                       vc_position_id)
-  player_ids <- validated$ids
-  captain_position_id <- validated$capt
-  vc_position_id <- validated$vc
+  validated <- validate_team_selection(team)
+
+  # If changes to be summarised, get current team before update
+  if (report_changes) {
+    pre_changes <- get_my_team(manager_id = Sys.getenv("FPL_MANAGER_ID"))
+  }
 
   # Get team payload in format for server
   cli::cli_alert("Creating payload...")
-  picks_payload_lists <- purrr::map(1:15, ~list(element = player_ids[.x],
-                                                 is_captain = .x==captain_position_id,
-                                                 is_vice_captain = .x==vc_position_id,
-                                                 position = .x))
+  picks_payload_lists <- purrr::map(1:15, ~list(element = attr(team, "submission_order")[.x],
+                                                is_captain = attr(team, "submission_order")[.x]==attr(team, "captain"),
+                                                is_vice_captain = attr(team, "submission_order")[.x]==attr(team, "vc"),
+                                                position = .x))
 
   payload <- list(
     'picks' = picks_payload_lists,
@@ -100,83 +103,146 @@ update_team <- function(player_ids,
     httr2::req_perform(verbosity = verbose)
 
   if (rep$status_code == 200) {
-    cli::cli_alert_success("Team changes made!")
+    if (report_changes) {
+      cli::cli_alert_success("Team update successful!")
+      summarise_team_changes(previous = pre_changes,
+                             current = team)
+    } else {
+      cli::cli_alert_success("Team update successful!")
+    }
   } else {
     cli::cli_abort("Team changes could not be made")
   }
 }
 
-#' Validate a team selection
-#'
-#' Takes in a vector of player IDs that are to be passed to update_team, and
-#' ensures they are in the right order, printing the team to the console for
-#' the users benefit
-#'
-#' @param player_ids a numeric vector of length 15 indicating the player IDs of
-#' players in your squad, with the first 11 being your starting XI
-#'
-#' @return the same numeric vector in an order that is acceptable for the API
-validate_team_selection <- function(player_ids,
-                                    cpt_pos,
-                                    vc_pos) {
+#' @export
+update_team.list <- function(team,
+                             verbose = 0,
+                             report_changes = TRUE) {
 
-  selection <- get_players() %>%
-    filter(id %in% player_ids) %>%
-    mutate(selection_pos = match(id, player_ids),
-           bench = !selection_pos %in% 1:11,
-           position = ordered(position, levels = c("GKP", "DEF", "MID", "FWD")),
-           is_captain = selection_pos == cpt_pos,
-           is_vice_captain = selection_pos == vc_pos) %>%
-    arrange(bench, position, desc(points_total))
+  # Check that team is valid
+  if (length(team) != 3) cli::cli_abort("If using a list to update a team, must be a named list of length 3")
+  if (length(team[[1]]) != 15|!is.numeric(team[[1]])) cli::cli_abort("If using a list to update a team, the first element must be a numeric vector of 15 player IDs")
+  if (length(team[[2]]) != 1 |!is.numeric(team[[2]])) cli::cli_abort("If using a list to update a team, the second element must be a single numeric player ID of the captain")
+  if (length(team[[3]]) != 1 |!is.numeric(team[[3]])) cli::cli_abort("If using a list to update a team, the third element must be a single numeric player ID of the vice-captain")
 
+  # Convert to team_selection
+  cli::cli_alert("Converting list to {.cls team_selection} object...")
+  valid_team <- team_selection(players = team[[1]],
+                               captain = team[[2]],
+                               vc = team[[3]])
 
-
-  # Print team info to console
-  print_team_selection(selection)
-
-  # Return new order of IDs
-  list(ids = selection$id,
-       capt = which(selection$is_captain),
-       vc = which(selection$is_vice_captain))
+  update_team(valid_team,
+              verbose = verbose)
 }
 
-#' Print a nicely formatted team selection
-#'
-#' @param selection_df a dataframe with 15 rows and at least
-#' columns 'id', 'position', 'known_as', 'points_total',
-#' 'is_captain' and 'is_vice_captain' (i.e. this can simply
-#' be the result of a call to get_my_team())
-#'
-#' @return print nicely formatted team sheet to console
-#'
 #' @export
-print_team_selection <- function(selection_df) {
+update_team.default <- function(team,
+                                verbose = 0,
+                                report_changes = TRUE) {
+  cli::cli_abort("{.fun update_team} can only be used with objects of class {.cls team_selection} or lists.")
+}
 
-  selection <- selection_df %>%
-    rename(any_of(c("selection_pos" = "team_position"))) %>%
-    mutate(bench = !selection_pos %in% 1:11,
-           position = ordered(position, levels = c("GKP", "DEF", "MID", "FWD")),
-           sel_string = paste0(cli::col_cyan(known_as),
-                               "-",
-                               cli::col_yellow(points_total),
-                               ifelse(is_captain,
-                                      cli::style_bold(" (C)"),
-                                      ifelse(is_vice_captain,
-                                             cli::style_bold(" (VC)"),
-                                             "")))) %>%
-    arrange(bench, position, desc(points_total))
+#' Assign a captain or vice-captain
+#'
+#' @param team an object with class team_selection
+#' @param pid the ID of the player to assign a role to
+#' @param role either 'c' to assign them the role of
+#' captain, or 'vc' to assign them the role of
+#' vice-captain.
+#'
+#' @return the team_selection object with the new role assigned
+assign_role <- function(team,
+                        pid,
+                        role = 'c') {
 
+  # Check initial arguments
+  if (!is_team_selection(team)) cli::cli_abort("{.fun assign_role} can only be used with an object of class {.cls team_selection}")
+  if (!is.numeric(pid)|length(pid) != 1) cli::cli_abort("{.arg pid} must be a single numeric player ID")
+  if (!role %in% c("c", "vc")) cli::cli_abort("{.arg role} must be one of 'c' or 'vc'")
 
-  # Print team info to console
-  starting_gkp <- paste(selection$sel_string[!selection$bench&selection$position=="GKP"], collapse = ";  ")
-  starting_defs <- paste(selection$sel_string[!selection$bench&selection$position=="DEF"], collapse = ";  ")
-  starting_mids <- paste(selection$sel_string[!selection$bench&selection$position=="MID"], collapse = ";  ")
-  starting_fwds <- paste(selection$sel_string[!selection$bench&selection$position=="FWD"], collapse = ";  ")
-  benched <- paste(selection$sel_string[selection$bench], collapse = "; ")
-  cli::cli_alert_info("Your selected team:")
-  cli::cli_bullets(paste0("GKP: ", starting_gkp))
-  cli::cli_bullets(paste0("DEF: ", starting_defs))
-  cli::cli_bullets(paste0("MID: ", starting_mids))
-  cli::cli_bullets(paste0("FWD: ", starting_fwds))
-  cli::cli_bullets(paste0("(Bench): ", benched))
+  # Check that player is in team, doesn't already have a role and is in starting XI
+  if (!pid %in% team$id) cli::cli_abort("{.arg pid} must be the ID of a player in the team")
+  if (!pid %in% attr(team, "submission_order")[1:11]) cli::cli_abort("Cannot assign a role to a non-starting player")
+  if (attr(team, "captain") == pid & role == "vc") cli::cli_abort("Selected player is already captain so cannot be assigned as vice-captain")
+  if (attr(team, "vc") == pid & role == "c") cli::cli_abort("Selected player is already vice-captain so cannot be assigned as captain")
+
+  # If all checks pass, assign new role
+  if (role == "c") {
+    attr(team, "captain") <- pid
+  } else if (role == "vc") {
+    attr(team, "vc") <- pid
+  }
+
+  # Return team with new role
+  team
+}
+
+#' Summarise the difference between two team_selection objects
+#'
+#' Take in two team_selection objects and summarise the changes between the two,
+#' with the changes being printed to the console.
+#'
+#' @param previous the previous team_selection object
+#' @param current the current team_selection object
+#'
+#' @return prints information to the console on the differences between the two teams
+summarise_team_changes <- function(previous,
+                                   current) {
+
+  # Check argument types
+  if (!is_team_selection(previous)) cli::cli_abort("{.arg previous} must be an object of class {.cls team_selection}")
+  if (!is_team_selection(current)) cli::cli_abort("{.arg current} must be an object of class {.cls team_selection}")
+
+  # List transfers
+  transfers_in <- current$id[!current$id %in% previous$id]
+  transfers_out <- previous$id[!previous$id %in% current$id]
+
+  # List substitutions
+  subs_in <- current$id[current$id %in% attr(current, "submission_order")[1:11] & !current$id %in% attr(previous, "submission_order")[1:11]]
+  subs_out <- previous$id[previous$id %in% attr(previous, "submission_order")[1:11] & !previous$id %in% attr(current, "submission_order")[1:11]]
+
+  cli::cli_alert_info("Squad changes:")
+
+  # Print information on transfers
+  if (length(transfers_in)) {
+    transf_in <- paste(cli::col_yellow(current$known_as[current$id %in% transfers_in]), collapse = "; ")
+    cli::cli_text(paste0("{cli::symbol$arrow_right}", cli::col_cyan("Transfers In: "), transf_in))
+  }
+  if (length(transfers_out)) {
+    transf_out <- paste(cli::col_yellow(previous$known_as[previous$id %in% transfers_out]), collapse = "; ")
+    cli::cli_text(paste0("{cli::symbol$arrow_left}", cli::col_cyan("Transfers Out: "), transf_out))
+  }
+  if (!length(transfers_in) & !length(transfers_out)) {
+    cli::cli_text("{cli::symbol$line} No transfers.")
+  }
+
+  # Print information on substitutions
+  if (length(subs_in)) {
+    subin <- paste(cli::col_yellow(current$known_as[current$id %in% subs_in]), collapse = "; ")
+    cli::cli_text(paste0("{cli::symbol$arrow_up}", cli::col_cyan("Subs In: "), subin))
+  }
+  if (length(subs_out)) {
+    subout <- paste(cli::col_yellow(current$known_as[current$id %in% subs_out]), collapse = "; ")
+    cli::cli_text(paste0("{cli::symbol$arrow_down}", cli::col_cyan("Subs In: "), subout))
+  }
+  if (!length(subs_in) & !length(subs_out)) {
+    cli::cli_text("{cli::symbol$line} No substitutes.")
+  }
+
+  # Print information on role changes
+  if (attr(previous, "captain") != attr(current, "captain")) {
+    prev_cap <- cli::col_red(previous$known_as[previous$id == attr(previous, "captain")])
+    current_cap <- cli::col_green(current$known_as[current$id == attr(current, "captain")])
+    cli::cli_text(paste0("{cli::symbol$circle_filled} Captain: ", prev_cap, " -> ", current_cap))
+  }
+  if (attr(previous, "vc") != attr(current, "vc")) {
+    prev_vc <- cli::col_red(previous$known_as[previous$id == attr(previous, "vc")])
+    current_vc <- cli::col_green(current$known_as[current$id == attr(current, "vc")])
+    cli::cli_text(paste0("{cli::symbol$circle_double} Vice-Captain: ", prev_vc, " -> ", current_vc))
+  }
+  if (attr(previous, "captain") == attr(current, "captain") & attr(previous, "vc") == attr(current, "vc")) {
+    cli::cli_text("{cli::symbol$line} No captaincy changes.")
+  }
+
 }

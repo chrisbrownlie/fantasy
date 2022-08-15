@@ -2,8 +2,6 @@
 #'
 #' Get the overall info data from the API, this function is cached.
 #'
-#' @import dplyr
-#'
 #' @return a list of the bootstrap-static endpoint data
 query_general_data <- function() {
 

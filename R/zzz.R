@@ -1,5 +1,5 @@
 .onLoad <- function(libname, pkgname) {
-  cli::cli_alert_info("Memoising functions...")
+  cli::cli_alert_info("Enabling function caching...")
   query_general_data <- memoise::memoise(query_general_data)
   query_fixtures_data <- memoise::memoise(query_fixtures_data)
   get_teams <- memoise::memoise(get_teams)
