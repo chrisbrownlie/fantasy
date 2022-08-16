@@ -10,10 +10,31 @@
     <loc>https://chrisbrownlie.github.io/fantasy/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/articles/authenticating.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/articles/example-tasks.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/articles/getting-data.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/articles/your-team.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/authors.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/index.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/activate_chip.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/assign_role.html</loc>
@@ -29,6 +50,9 @@
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/format_stat.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/formatting.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/get_fixture_list.html</loc>
@@ -82,6 +106,9 @@
     <loc>https://chrisbrownlie.github.io/fantasy/reference/require_authentication.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/search_for_player.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/summarise_team_changes.html</loc>
   </url>
   <url>
@@ -92,6 +119,9 @@
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/team_substitute.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/team_transfer.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/update_team.html</loc>
