@@ -1,0 +1,51 @@
+---
+title: "Authenticating"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Authenticating}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(fantasy)
+```
+In order to use the restricted part of the API, you must provide valid login details for the FPL website. You can create these by going to https://fantasy.premierleague.com and signing up for free.
+
+There are a few different ways to authenticate and the best option for you will depend on your use case.
+
+### Interactively
+If you are using RStudio IDE you can simply run `authenticate()` and some prompts will appear which ask you to fill out your email address and password. Once you have done this, the result will be saved *for the remainder of your session only*. If you are just playing around with the package and testing it out, this is the easiest way to authenticate.
+
+## Non-interactively
+If you are not using RStudio IDE you can supply *email* and *password* arguments to the authentication function:
+```{r arg-auth, eval = FALSE}
+authenticate(email = "my@email_address.co.uk",
+             password = "mypassword")
+```
+
+## Environment variables
+While the above method can be useful for those running R interactively outside of RStudio, it is not an ideal way of solving the problem of code that is to be run non-interactively at a later date - e.g. in a shiny app, another package, or as part of a script that is to be shared.
+
+For these use cases, it is better to take advantage of the "FPL_LOGIN" and "FPL_PASSWORD" environment variables. If these are set, they will be used to authenticate before all other options.
+
+You can then set these in your .Renviron file to avoid having to re-enter your credentials every time you use the package. Make sure to add your .Renviron to your .gitignore if you are using Git for your project.
+```{r env-auth, eval = FALSE}
+#Sys.setenv("FPL_LOGIN" = "my@email_address.co.uk)
+#Sys.setenv("FPL_PASSWORD" = "mypassword")
+authenticate()
+```
+
+## How it works
+The authentication function works by sending a POST request to the FPL API and storing the resulting authentication cookie as an option for the session. This cookie is then used whenever a restricted action is taken.
+
+You can see the cookie by running `getOption("FANTASY_COOKIE")`. If you unset or remove this, you will need to reauthenticate.
+
+As the authentication cookie is only temporary, you will have to authenticate in every R session you run. However, you can use the Environment Variables method above to avoid having to enter your credentials every time.

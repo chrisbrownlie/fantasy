@@ -5,6 +5,8 @@
 #' next gameweek.
 #'
 #' @return a dataframe of teams and their likely starting XI
+#'
+#' @export
 get_predicted_lineups <- function() {
 
   # Get the page

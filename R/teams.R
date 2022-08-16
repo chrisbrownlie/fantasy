@@ -3,6 +3,8 @@
 #' Use general data endpoint to get teams as dataframe
 #'
 #' @return dataframe of information on teams
+#'
+#' @export
 get_teams <- function() {
 
   # Query API or cache
@@ -23,6 +25,8 @@ get_teams <- function() {
 #' (the default), return abbreviation
 #'
 #' @return a string representing a team name
+#'
+#' @export
 team_from_id <- function(id, full = FALSE) {
   teams <- get_teams() |>
     arrange(team_id) |>

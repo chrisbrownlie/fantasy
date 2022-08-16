@@ -3,6 +3,8 @@
 #' Use general endpoint to get players data
 #'
 #' @return a dataframe of player info
+#'
+#' @export
 get_players <- function() {
 
   # Get data from API or cache
@@ -71,6 +73,8 @@ get_players <- function() {
 #' @param player_id the ID of the player
 #'
 #' @return dataframe of player summary for the current season
+#'
+#' @export
 get_player_summary <- function(player_id) {
 
   # Query API for individual player info
@@ -130,6 +134,8 @@ get_player_summary <- function(player_id) {
 #' (the default), return the 'known as' name
 #'
 #' @return a string representing a player name
+#'
+#' @export
 player_from_id <- function(id, full = FALSE) {
   players <- get_players()
   single_player <- function(pl_id, plyrs, fll) {

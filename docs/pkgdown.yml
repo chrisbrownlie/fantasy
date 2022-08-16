@@ -1,8 +1,12 @@
 pandoc: '2.18'
 pkgdown: 2.0.6
 pkgdown_sha: ~
-articles: {}
-last_built: 2022-08-15T21:37Z
+articles:
+  authenticating: authenticating.html
+  example-tasks: example-tasks.html
+  getting-data: getting-data.html
+  your-team: your-team.html
+last_built: 2022-08-16T15:47Z
 urls:
   reference: https://chrisbrownlie.github.io/fantasy/reference
   article: https://chrisbrownlie.github.io/fantasy/articles

@@ -1,0 +1,32 @@
+---
+title: "Getting FPL data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting FPL data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(fantasy)
+```
+One of the ways to use {fantasy} is for extracting data from the FPL API for further analysis. This might be in order to analyse good players to sign, track your progress over the season, or even build a machine learning model to make team decisions for you. There are a few different types of data that can be extracted.
+
+## Fixtures
+
+## Teams
+
+## Players
+
+## Leagues
+
+## Managers/Users
+
+## Predicted lineups (alternative source)

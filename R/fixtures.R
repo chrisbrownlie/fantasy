@@ -18,7 +18,7 @@ query_fixtures_data <- function() {
 #' Query the API for a list of fixtures and return as
 #' a tibble with one row per fixture.
 #'
-#' @return a tibble of premier league fixtures
+#' @return a tibble of premier league fixtures for the current season
 #'
 #' @export
 get_fixture_list <- function() {

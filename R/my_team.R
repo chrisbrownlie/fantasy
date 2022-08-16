@@ -1,21 +1,17 @@
 #' Get my team
 #'
-#' Get current fantasy premier league team for a manager
-#'
-#' @param manager_id the manager ID of the team to show - this does
-#' not need to be supplied once you have logged in using authenticate()
+#' Get current fantasy premier league team for a logged-in user
 #'
 #' @return an object of class team, representing your current team
 #'
 #' @export
-get_my_team <- function(manager_id) {
-
-  # If manager_id ommitted, check
-  if (missing(manager_id)) manager_id <- Sys.getenv("FPL_MANAGER_ID")
-  if (manager_id == "") cli::cli_abort("Must supply a manager ID or login using {.fun authenticate}")
+get_my_team <- function() {
 
   # Check authentication
   require_authentication()
+
+  # Get manager ID (this environment variable must exist if authenticated)
+  manager_id <- Sys.getenv("FPL_MANAGER_ID")
 
   # Construct endpoint URL for my team
   my_team_ep <- construct(paste0("my-team/", manager_id, "/"))
@@ -152,6 +148,8 @@ update_team.default <- function(team,
 #' vice-captain.
 #'
 #' @return the team object with the new role assigned
+#'
+#' @export
 assign_role <- function(team,
                         pid,
                         role = 'c') {
@@ -187,6 +185,8 @@ assign_role <- function(team,
 #' @param current the current team object
 #'
 #' @return prints information to the console on the differences between the two teams
+#'
+#' @export
 summarise_team_changes <- function(previous,
                                    current) {
 

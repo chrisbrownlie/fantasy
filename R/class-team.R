@@ -1,13 +1,21 @@
-#' Construct new team object
+#' Construct new team
 #'
 #' @param players a numeric vector of 15 player IDs
 #' @param captain the ID of the teams captain
 #' @param vc the ID of the teams vice captain
+#' @param bank a numeric value indicating the teams remaining balance (in FPL£m)
+#' @param transfers an integer indicating the number of free transfers a
+#' team has remaining
+#' @param chips a named logical vector of length 4, indicating whether each of
+#' the teams chips is available or not
 #'
 #' @return a new tibble of class team
 new_team <- function(players,
-                               captain,
-                               vc) {
+                     captain,
+                     vc,
+                     bank,
+                     transfers,
+                     chips) {
 
   # Create new team object
   tibble::new_tibble(
@@ -15,20 +23,23 @@ new_team <- function(players,
     captain = captain,
     vc = vc,
     submission_order = players,
+    bank = bank,
+    transfers = transfers,
+    chips = chips,
     class = "team"
   )
 }
 
-#' Validate new team object
+#' Validate new team
 #'
 #' @param x an object of class team
 #'
 #' @return the input team object, or throws an error if the
-#' object is not valid.
+#' team is not valid.
 validate_team <- function(x) {
 
   # 15 players
-  if (nrow(x)!=15) cli::cli_abort("Teams must consist of 15 players (11 starting players and 4 subs)")
+  if (nrow(x)!=15) cli::cli_abort("Teams must be length 15 (11 starting players and 4 subs)")
 
   # Only valid players allowed (name will be NA for invalid players because of the
   # left_join in team())
@@ -93,38 +104,66 @@ validate_team <- function(x) {
   # Update submission order attribute with position-correct order
   attr(x, "submission_order") <- x$id
 
+  # OTHER ATTRIBUTES
+  # Check that bank balance is not negative
+  if (!is.numeric(attr(x, "bank"))) cli::cli_abort("Bank balance must be a single non-negative numeric value")
+  if (length(attr(x, "bank"))!=1) cli::cli_abort("Bank balance must be a single non-negative numeric value")
+  if (attr(x, "bank") < 0) cli::cli_abort("This action would take bank balance below zero.")
+
+  # Check that transfers not used up
+  if (!is.numeric(attr(x, "transfers"))) cli::cli_abort("Transfers must be a single integer value")
+  if (attr(x, "transfers") < 0) cli::cli_alert_warning("This action is not covered by free transfers so will cost points.")
+
+  # Check that chips has all expected names and is logical
+  if (!is.logical(attr(x, "chips"))|length(chips)!=4|!length(names(chips))) cli::cli_abort("Chips must be a named logical vector of length 4")
+  if (!setequal(names(chips), c("bboost", "3xc", "wildcard", "freehit"))) cli::cli_abort("Chips must be named: 'bboost', '3xc', 'wildcard', 'freehit'")
+
   x
 }
 
 
-#' Create a new team object and validate it
+#' Create a new team and validate it
+#'
+#' Typically you will not have to use this function explicitly, but it can
+#' be used to build on top of the {fantasy} package.
 #'
 #' This function takes in 15 player IDs and a captain/vice-captain designation,
 #' enriches this into a tibble with information on each player, then validates
 #' this against a set of criteria to ensure the selected 15 is valid. It then
-#' returns the enriched tibble as an object of class team
+#' returns the enriched tibble as an object of class team.
 #'
 #' @param players a numeric vector of length 15 indicating 15 player IDs
 #' @param captain a numeric value indicating the ID of the team's captain
 #' @param vc a numeric value indicating the ID of the team's vice-captain
+#' @param bank a numeric value indicating the teams remaining balance (in FPL£m)
+#' @param transfers an integer indicating the number of free transfers a
+#' team has remaining
+#' @param chips a named logical vector of length 4, indicating whether each of
+#' the teams chips is available or not
 #'
-#' @return a vector with class team
+#' @return a tibble with class `<team>`
 #'
 #' @export
 team <- function(players,
-                           captain,
-                           vc) {
+                 captain,
+                 vc,
+                 bank,
+                 transfers,
+                 chips) {
 
-  # Create new raw team object tibble
+  # Create new raw team tibble
   team <- new_team(players = players,
-                                       captain = captain,
-                                       vc = vc)
+                   captain = captain,
+                   vc = vc,
+                   bank = bank,
+                   transfers = transfers,
+                   chips = chips)
 
   # Get all valid player info for enriching
   valid_players <- get_players()
 
-  # Enrich raw selection with players info
-  enriched_selection <- team |>
+  # Enrich raw team with players info
+  enriched_team <- team |>
     left_join(valid_players, by = "id") |>
     mutate(position = ordered(position, levels = c("GKP", "DEF", "MID", "FWD")),
            team_position = row_number()) |>
@@ -141,17 +180,17 @@ team <- function(players,
       cost
     )
 
-  # Validate selection (this potentially changes the order of the players)
+  # Validate team (this potentially changes the order of the players)
   # and return
-  validate_team(enriched_selection)
+  validate_team(enriched_team)
 }
 
-#' Format function for team object
+#' Format function for team selection
 #' @export
 print.team <- function(x, ...) {
 
   # If team is enriched, print nicely
-  if (all(c("known_as", "position", "points_total") %in% names(x))) {
+  if (all(c("known_as", "position", "points_total") %in% names(x))&!isTRUE(getOption("FANTASY_UNFORMAT"))) {
 
     # Ensure team is in submission order for printing
     x <- x[match(attr(x, "submission_order"), x$id),]
@@ -172,18 +211,38 @@ print.team <- function(x, ...) {
     starting_mids <- paste(selection$sel_string[1:11][selection$position[1:11]=="MID"], collapse = ";  ")
     starting_fwds <- paste(selection$sel_string[1:11][selection$position[1:11]=="FWD"], collapse = ";  ")
     benched <- paste(selection$sel_string[12:15], collapse = "; ")
-    cli::cli_alert_info("Team:")
+    cli::cli_alert_info("Team selection:")
     cli::cli_bullets(paste0("GKP: ", starting_gkp))
     cli::cli_bullets(paste0("DEF: ", starting_defs))
     cli::cli_bullets(paste0("MID: ", starting_mids))
     cli::cli_bullets(paste0("FWD: ", starting_fwds))
     cli::cli_bullets(paste0("(Bench): ", benched))
   } else {
-    # If selection is not enriched, print simply
-    cli::cli_alert_info("Team (IDs only):")
-    cli::cli_bullets(paste(x$id, collapse = "; "))
+    # If team is not enriched, print normally as tibble
+    NextMethod()
   }
 }
 
 #' Is this object a team object?
+#'
+#' @param x an object to test
 is_team <- function(x) inherits(x, "team")
+
+#' Remove all formatting of team objects for the current session
+#'
+#' Strip formatting from objects of class `<team>` so that the underlying
+#' tibble is returned instead.
+#' This function sets an options("FANTASY_UNFORMAT" = TRUE), which you
+#' can add to your .Rprofile to activate for every session.
+#'
+#' @return invisibly sets an option to avoid custom formatting of team objects
+#'
+#' @export
+global_remove_formatting <- function() {
+  options("FANTASY_UNFORMAT" = TRUE)
+  cli::cli_alert("{.cls team} objects will no longer be custom formatted. To revert to formatted output use {.fun global_restore_formatting}")
+}
+global_restore_formatting <- function() {
+  options("FANTASY_UNFORMAT" = FALSE)
+  cli::cli_alert("{.cls team} objects will now be custom formatted. To revert to unformatted output use {.fun global_remove_formatting}")
+}

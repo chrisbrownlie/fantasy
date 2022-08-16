@@ -40,8 +40,10 @@ team_substitute.team <- function(team, p1, p2) {
 
   # Create and validate the new team object
   team(new_team,
-                 captain = attr(team, "captain"),
-                 vc = attr(team, "vc"))
+       captain = attr(team, "captain"),
+       vc = attr(team, "vc"),
+       bank = attr(team, "bank"),
+       transfers = attr(team, "transfers"))
 
 }
 
