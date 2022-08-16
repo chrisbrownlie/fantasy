@@ -20,3 +20,4 @@ a list
 \description{
 Query an API endpoint. Lightweight wrapper round httr2 funcs
 }
+\keyword{internal}

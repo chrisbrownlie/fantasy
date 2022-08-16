@@ -15,3 +15,4 @@ a dataframe with columns 'type', 'team', 'player' and 'value'
 \description{
 Format a list of information about a particular stat as a tibble
 }
+\keyword{internal}

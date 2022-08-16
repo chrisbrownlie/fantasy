@@ -13,3 +13,4 @@ the raw fixtures data as a list
 Get the raw underlying fixtures data. This function is
 cached.
 }
+\keyword{internal}

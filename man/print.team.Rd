@@ -2,10 +2,11 @@
 % Please edit documentation in R/class-team.R
 \name{print.team}
 \alias{print.team}
-\title{Format function for team object}
+\title{Format function for team selection}
 \usage{
 \method{print}{team}(x, ...)
 }
 \description{
-Format function for team object
+Format function for team selection
 }
+\keyword{internal}

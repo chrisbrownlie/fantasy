@@ -2,7 +2,7 @@
 % Please edit documentation in R/class-team.R
 \name{validate_team}
 \alias{validate_team}
-\title{Validate new team object}
+\title{Validate new team}
 \usage{
 validate_team(x)
 }
@@ -11,8 +11,9 @@ validate_team(x)
 }
 \value{
 the input team object, or throws an error if the
-object is not valid.
+team is not valid.
 }
 \description{
-Validate new team object
+Validate new team
 }
+\keyword{internal}

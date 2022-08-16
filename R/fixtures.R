@@ -4,6 +4,8 @@
 #' cached.
 #'
 #' @return the raw fixtures data as a list
+#'
+#' @keywords internal
 query_fixtures_data <- function() {
 
   # Get fixtures endpoint
@@ -78,6 +80,8 @@ get_fixture_stats <- function(fixture_id = NULL) {
 #' @param stat a list containing information on a particular stat in a particular fixture
 #'
 #' @return a dataframe with columns 'type', 'team', 'player' and 'value'
+#'
+#' @keywords internal
 format_stat <- function(stat) {
 
   # Name of stat

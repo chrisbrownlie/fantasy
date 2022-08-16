@@ -135,6 +135,9 @@ get_player_summary <- function(player_id) {
 #'
 #' @return a string representing a player name
 #'
+#' @examples
+#' player_from_id(283, full = TRUE)
+#'
 #' @export
 player_from_id <- function(id, full = FALSE) {
   players <- get_players()
@@ -159,4 +162,26 @@ player_from_id <- function(id, full = FALSE) {
   } else {
     single_player(id, plyrs = players, fll = full)
   }
+}
+
+
+#' Search for a player ID by name
+#'
+#' @param search the string to use to match against the players name
+#'
+#' @return a tibble of potential matches and their player ID
+#'
+#' @examples
+#' search_for_player("Mahrez")
+#'
+#' @export
+search_for_player <- function(search) {
+
+  # Get all players
+  players <- get_players()
+
+  # Filter for search
+  players |>
+    filter(grepl(pattern = search, x = name, ignore.case = TRUE)) |>
+    transmute(id, name, team = team_from_id(team, full = TRUE))
 }

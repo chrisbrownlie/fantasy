@@ -12,3 +12,4 @@ saves the users manager ID to the environment variable FPL_MANAGER_ID
 \description{
 Get a logged in users manager ID and save to environment variable
 }
+\keyword{internal}

@@ -6,6 +6,9 @@
 \usage{
 is_team(x)
 }
+\arguments{
+\item{x}{an object to test}
+}
 \description{
 Is this object a team object?
 }

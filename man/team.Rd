@@ -2,9 +2,9 @@
 % Please edit documentation in R/class-team.R
 \name{team}
 \alias{team}
-\title{Create a new team object and validate it}
+\title{Create a new team and validate it}
 \usage{
-team(players, captain, vc)
+team(players, captain, vc, bank, transfers, chips)
 }
 \arguments{
 \item{players}{a numeric vector of length 15 indicating 15 player IDs}
@@ -12,13 +12,25 @@ team(players, captain, vc)
 \item{captain}{a numeric value indicating the ID of the team's captain}
 
 \item{vc}{a numeric value indicating the ID of the team's vice-captain}
+
+\item{bank}{a numeric value indicating the teams remaining balance (in FPL£m)}
+
+\item{transfers}{an integer indicating the number of free transfers a
+team has remaining}
+
+\item{chips}{a named logical vector of length 4, indicating whether each of
+the teams chips is available or not}
 }
 \value{
-a vector with class team
+a tibble with class \verb{<team>}
 }
 \description{
+Typically you will not have to use this function explicitly, but it can
+be used to build on top of the {fantasy} package.
+}
+\details{
 This function takes in 15 player IDs and a captain/vice-captain designation,
 enriches this into a tibble with information on each player, then validates
 this against a set of criteria to ensure the selected 15 is valid. It then
-returns the enriched tibble as an object of class team
+returns the enriched tibble as an object of class team.
 }

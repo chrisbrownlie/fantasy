@@ -15,3 +15,4 @@ the full URL of the endpoint
 \description{
 Construct an FPL API endpoint
 }
+\keyword{internal}

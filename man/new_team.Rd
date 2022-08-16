@@ -2,9 +2,9 @@
 % Please edit documentation in R/class-team.R
 \name{new_team}
 \alias{new_team}
-\title{Construct new team object}
+\title{Construct new team}
 \usage{
-new_team(players, captain, vc)
+new_team(players, captain, vc, bank, transfers, chips)
 }
 \arguments{
 \item{players}{a numeric vector of 15 player IDs}
@@ -12,10 +12,19 @@ new_team(players, captain, vc)
 \item{captain}{the ID of the teams captain}
 
 \item{vc}{the ID of the teams vice captain}
+
+\item{bank}{a numeric value indicating the teams remaining balance (in FPL£m)}
+
+\item{transfers}{an integer indicating the number of free transfers a
+team has remaining}
+
+\item{chips}{a named logical vector of length 4, indicating whether each of
+the teams chips is available or not}
 }
 \value{
 a new tibble of class team
 }
 \description{
-Construct new team object
+Construct new team
 }
+\keyword{internal}

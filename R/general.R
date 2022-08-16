@@ -3,6 +3,8 @@
 #' Get the overall info data from the API, this function is cached.
 #'
 #' @return a list of the bootstrap-static endpoint data
+#'
+#' @keywords internal
 query_general_data <- function() {
 
   # Get general info endpoint

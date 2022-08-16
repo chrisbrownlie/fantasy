@@ -4,15 +4,11 @@
 \alias{get_my_team}
 \title{Get my team}
 \usage{
-get_my_team(manager_id)
-}
-\arguments{
-\item{manager_id}{the manager ID of the team to show - this does
-not need to be supplied once you have logged in using authenticate()}
+get_my_team()
 }
 \value{
 an object of class team, representing your current team
 }
 \description{
-Get current fantasy premier league team for a manager
+Get current fantasy premier league team for a logged-in user
 }

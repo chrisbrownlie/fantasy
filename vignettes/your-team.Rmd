@@ -2,7 +2,7 @@
 title: "Managing your team"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Changing your team}
+  %\VignetteIndexEntry{Managing your team}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,12 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
  
-This vignette outlines how you can use the fantasy package to make any changes that you would usually make on the FPL website, via R.
+This vignette outlines how you can use the fantasy package to make any changes that you would usually make on the FPL website, via R. 
+
+Before you run any of the functions outlined in this article, you must first authenticate yourself. See the 'Authenticating' article for more information
 
 #### The `<team>` object
 Behind all of the functionality described below, is the `<team>` class that is provided with the package. This class ensures all the validation and output formatting, as well as restricting the use of the functions provided in the package, to avoid errors.
 
-All a <team> object is, is a tibble of 15 players, with three key attributes: the player ID of the captain, the player ID of the vice-captain, and the 'submission order' of the team (FPL requires players to be in position order, for both the starting XI and the bench). In addition to this, there are several restrictions on how the team can be constructed and the object is validated after every attempted action - see the [FPL Website](https://www.premierleague.com/news/1252542) for more information on what these restrictions are.
+All a `<team>` object is, is a tibble of 15 players, with three key attributes: the player ID of the captain, the player ID of the vice-captain, and the 'submission order' of the team (FPL requires players to be in position order, for both the starting XI and the bench). In addition to this, there are several restrictions on how the team can be constructed and the object is validated after every attempted action - see the [FPL Website](https://www.premierleague.com/news/1252542) for more information on what these restrictions are.
 
 **IMPORTANT**: Note that no changes will be made to your fantasy team until you confirm your changes, and that once this is done *it cannot be undone*. For most actions this does not matter as you can make a substitution or change your captain as many times as you want, but if you make a transfer it **will** count towards your transfer quota (which for most gameweeks is 1). The `update_team()` function will by default ask for confirmation when you confirm a transfer but it is worth making sure you understand this - {fantasy} will not be to blame if you confirm a transfer you end up regretting!
 

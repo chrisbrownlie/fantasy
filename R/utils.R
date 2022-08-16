@@ -5,6 +5,8 @@
 #' @param endpoint the endpoint to use
 #'
 #' @return the full URL of the endpoint
+#'
+#' @keywords internal
 construct <- function(endpoint) {
   sprintf("https://fantasy.premierleague.com/api/%s", endpoint)
 }
@@ -19,6 +21,8 @@ construct <- function(endpoint) {
 #' of the response should be returned
 #'
 #' @return a list
+#'
+#' @keywords internal
 perform_query <- function(endpoint_url,
                           ...,
                           type = "json") {

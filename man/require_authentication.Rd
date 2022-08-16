@@ -14,3 +14,4 @@ Check the value of the FANTASY_COOKIE option to see if user
 has authenticated in this session and a valid cookie has
 been stored.
 }
+\keyword{internal}

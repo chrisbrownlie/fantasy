@@ -96,6 +96,8 @@ authenticate <- function(email,
 #' been stored.
 #'
 #' @return throws an error if no valid cookie has been stored
+#'
+#' @keywords internal
 require_authentication <- function() {
   if (!length(getOption("FANTASY_COOKIE"))) cli::cli_abort("You need to login using {.fun authenticate} first.")
 }
@@ -103,6 +105,8 @@ require_authentication <- function() {
 #' Get a logged in users manager ID and save to environment variable
 #'
 #' @return saves the users manager ID to the environment variable FPL_MANAGER_ID
+#'
+#' @keywords internal
 identify <- function() {
 
   # Check that user is authenticated

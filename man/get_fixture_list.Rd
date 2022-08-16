@@ -7,7 +7,7 @@
 get_fixture_list()
 }
 \value{
-a tibble of premier league fixtures
+a tibble of premier league fixtures for the current season
 }
 \description{
 Query the API for a list of fixtures and return as

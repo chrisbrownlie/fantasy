@@ -24,15 +24,13 @@
 <li class="nav-item">
   <a class="nav-link" href="../articles/your-team.html">Managing your team</a>
 </li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-more">More</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-more">
     <a class="dropdown-item" href="../articles/authenticating.html">Authenticating</a>
     <a class="dropdown-item" href="../articles/example-tasks.html">Example tasks</a>
+    <a class="dropdown-item" href="../reference/index.html">Reference</a>
   </div>
-</li>
-<li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
@@ -51,9 +49,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="extract-data">Extract data<a class="anchor" aria-label="anchor" href="#extract-data"></a></h2>
       
-      
+      <p class="section-desc"></p><p>Request data from the FPL API</p>
 
       
     </div><div id="" class="section level2">
@@ -62,26 +60,6 @@
       
 
       <dl><dt>
-          
-          <code><a href="assign_role.html">assign_role()</a></code> 
-        </dt>
-        <dd>Assign a captain or vice-captain</dd>
-      </dl><dl><dt>
-          
-          <code><a href="authenticate.html">authenticate()</a></code> 
-        </dt>
-        <dd>Authenticate a user for the Fantasy Premier League API</dd>
-      </dl><dl><dt>
-          
-          <code><a href="construct.html">construct()</a></code> 
-        </dt>
-        <dd>Construct an API URL</dd>
-      </dl><dl><dt>
-          
-          <code><a href="format_stat.html">format_stat()</a></code> 
-        </dt>
-        <dd>Format a stat</dd>
-      </dl><dl><dt>
           
           <code><a href="get_fixture_list.html">get_fixture_list()</a></code> 
         </dt>
@@ -116,66 +94,32 @@
           <code><a href="get_teams.html">get_teams()</a></code> 
         </dt>
         <dd>Get list of teams</dd>
+      </dl></div><div class="section level2">
+      <h2 id="manage-your-team">Manage your team<a class="anchor" aria-label="anchor" href="#manage-your-team"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="authenticate.html">authenticate()</a></code> 
+        </dt>
+        <dd>Authenticate a user for the Fantasy Premier League API</dd>
       </dl><dl><dt>
           
-          <code><a href="identify.html">identify()</a></code> 
+          <code><a href="get_my_team.html">get_my_team()</a></code> 
         </dt>
-        <dd>Get a logged in users manager ID and save to environment variable</dd>
+        <dd>Get my team</dd>
       </dl><dl><dt>
           
-          <code><a href="is_team.html">is_team()</a></code> 
+          <code><a href="assign_role.html">assign_role()</a></code> 
         </dt>
-        <dd>Is this object a team object?</dd>
-      </dl><dl><dt>
-          
-          <code><a href="new_team.html">new_team()</a></code> 
-        </dt>
-        <dd>Construct new team object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="perform_query.html">perform_query()</a></code> 
-        </dt>
-        <dd>Perform API query</dd>
-      </dl><dl><dt>
-          
-          <code><a href="player_from_id.html">player_from_id()</a></code> 
-        </dt>
-        <dd>Convert player ID to name</dd>
-      </dl><dl><dt>
-          
-          <code><a href="print.team.html">print(<i>&lt;team&gt;</i>)</a></code> 
-        </dt>
-        <dd>Format function for team object</dd>
-      </dl><dl><dt>
-          
-          <code><a href="query_fixtures_data.html">query_fixtures_data()</a></code> 
-        </dt>
-        <dd>Get raw fixtures data</dd>
-      </dl><dl><dt>
-          
-          <code><a href="query_general_data.html">query_general_data()</a></code> 
-        </dt>
-        <dd>Query general info endpoint</dd>
-      </dl><dl><dt>
-          
-          <code><a href="require_authentication.html">require_authentication()</a></code> 
-        </dt>
-        <dd>Ensure a user has logged in</dd>
-      </dl><dl><dt>
-          
-          <code><a href="summarise_team_changes.html">summarise_team_changes()</a></code> 
-        </dt>
-        <dd>Summarise the difference between two team objects</dd>
-      </dl><dl><dt>
-          
-          <code><a href="team.html">team()</a></code> 
-        </dt>
-        <dd>Create a new team object and validate it</dd>
-      </dl><dl><dt>
-          
-          <code><a href="team_from_id.html">team_from_id()</a></code> 
-        </dt>
-        <dd>Convert team ID to abbreviation</dd>
+        <dd>Assign a captain or vice-captain</dd>
       </dl><dl><dt>
           
           <code><a href="team_substitute.html">team_substitute()</a></code> 
@@ -183,16 +127,68 @@
         <dd>Switch the position of two players</dd>
       </dl><dl><dt>
           
+          <code><a href="team_transfer.html">team_transfer()</a></code> 
+        </dt>
+        <dd>Replace a player in your team with a different valid player</dd>
+      </dl><dl><dt>
+          
+          <code><a href="activate_chip.html">activate_chip()</a></code> 
+        </dt>
+        <dd>Use one of your chips</dd>
+      </dl><dl><dt>
+          
+          <code><a href="summarise_team_changes.html">summarise_team_changes()</a></code> 
+        </dt>
+        <dd>Summarise the difference between two team objects</dd>
+      </dl><dl><dt>
+          
           <code><a href="update_team.html">update_team()</a></code> 
         </dt>
         <dd>Update your team</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utility-functions">Utility functions<a class="anchor" aria-label="anchor" href="#utility-functions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="player_from_id.html">player_from_id()</a></code> 
+        </dt>
+        <dd>Convert player ID to name</dd>
       </dl><dl><dt>
           
-          <code><a href="validate_team.html">validate_team()</a></code> 
+          <code><a href="search_for_player.html">search_for_player()</a></code> 
         </dt>
-        <dd>Validate new team object</dd>
+        <dd>Search for a player ID by name</dd>
+      </dl><dl><dt>
+          
+          <code><a href="team_from_id.html">team_from_id()</a></code> 
+        </dt>
+        <dd>Convert team ID to abbreviation</dd>
+      </dl><dl><dt>
+          
+          <code><a href="team.html">team()</a></code> 
+        </dt>
+        <dd>Create a new team and validate it</dd>
+      </dl><dl><dt>
+          
+          <code><a href="is_team.html">is_team()</a></code> 
+        </dt>
+        <dd>Is this object a team object?</dd>
+      </dl><dl><dt>
+          
+          <code><a href="formatting.html">global_remove_formatting()</a></code> <code><a href="formatting.html">global_restore_formatting()</a></code> 
+        </dt>
+        <dd>Remove all formatting of team objects for the current session</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

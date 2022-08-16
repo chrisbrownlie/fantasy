@@ -10,6 +10,8 @@
 #' the teams chips is available or not
 #'
 #' @return a new tibble of class team
+#'
+#' @keywords internal
 new_team <- function(players,
                      captain,
                      vc,
@@ -36,6 +38,8 @@ new_team <- function(players,
 #'
 #' @return the input team object, or throws an error if the
 #' team is not valid.
+#'
+#' @keywords internal
 validate_team <- function(x) {
 
   # 15 players
@@ -186,7 +190,7 @@ team <- function(players,
 }
 
 #' Format function for team selection
-#' @export
+#' @keywords internal
 print.team <- function(x, ...) {
 
   # If team is enriched, print nicely
@@ -226,6 +230,8 @@ print.team <- function(x, ...) {
 #' Is this object a team object?
 #'
 #' @param x an object to test
+#'
+#' @export
 is_team <- function(x) inherits(x, "team")
 
 #' Remove all formatting of team objects for the current session
@@ -237,11 +243,15 @@ is_team <- function(x) inherits(x, "team")
 #'
 #' @return invisibly sets an option to avoid custom formatting of team objects
 #'
+#' @rdname formatting
 #' @export
 global_remove_formatting <- function() {
   options("FANTASY_UNFORMAT" = TRUE)
   cli::cli_alert("{.cls team} objects will no longer be custom formatted. To revert to formatted output use {.fun global_restore_formatting}")
 }
+#' Restore formatting
+#' @rdname formatting
+#' @export
 global_restore_formatting <- function() {
   options("FANTASY_UNFORMAT" = FALSE)
   cli::cli_alert("{.cls team} objects will now be custom formatted. To revert to unformatted output use {.fun global_remove_formatting}")

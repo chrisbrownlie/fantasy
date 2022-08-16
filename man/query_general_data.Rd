@@ -12,3 +12,4 @@ a list of the bootstrap-static endpoint data
 \description{
 Get the overall info data from the API, this function is cached.
 }
+\keyword{internal}

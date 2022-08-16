@@ -5,7 +5,7 @@
 #'
 #' @param x a team object
 #'
-#' @return
+#' @return the input team with the chip activated
 #'
 #' @export
 activate_chip <- function(x) {

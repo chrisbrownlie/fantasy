@@ -27,6 +27,7 @@ navbar:
           - text: Example tasks
             href: articles/example-tasks.html
           - text: Reference
+            href: reference/index.html
 
 reference:
   - title: Extract data
@@ -35,16 +36,20 @@ reference:
     - starts_with("get_")
   - title: Manage your team
   - contents:
+    - authenticate
     - get_my_team
     - assign_role
-    - team_substitution
+    - team_substitute
     - team_transfer
     - activate_chip
+    - summarise_team_changes
     - update_team
   - title: Utility functions
   - contents:
     - player_from_id
-    - search_for_id
+    - search_for_player
     - team_from_id
+    - team
+    - is_team
     - global_remove_formatting
     - global_restore_formatting
