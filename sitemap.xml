@@ -34,13 +34,16 @@
     <loc>https://chrisbrownlie.github.io/fantasy/news/index.html</loc>
   </url>
   <url>
-    <loc>https://chrisbrownlie.github.io/fantasy/reference/activate_chip.html</loc>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/all_chips.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/assign_role.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/authenticate.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/chips.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/construct.html</loc>
@@ -109,6 +112,9 @@
     <loc>https://chrisbrownlie.github.io/fantasy/reference/search_for_player.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/show_transfer_targets.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/summarise_team_changes.html</loc>
   </url>
   <url>
@@ -119,6 +125,9 @@
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/team_substitute.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/team_to_df.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/team_transfer.html</loc>
