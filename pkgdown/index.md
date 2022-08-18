@@ -201,7 +201,7 @@ get_my_team()
 
 # Swap two players in your team
 # - {fantasy} will automatically handle any restrictions or reordering of your team
-get_my_team() |>
+get_my_team() %>%
   team_substitute(p1 = 465, p2 = 166)
 #> ℹ Team:
 #> GKP: 15-Ramsdale (VC)
@@ -211,8 +211,8 @@ get_my_team() |>
 #> (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge
 
 # Change the captain or vice captain
-get_my_team() |>
-  assign_role(pid = 255, role = "c") |>
+get_my_team() %>%
+  assign_role(pid = 255, role = "c") %>%
   assign_role(pid = 15, role = "vc")
 #> ℹ Team:
 #> GKP: 15-Ramsdale (VC)
@@ -222,10 +222,10 @@ get_my_team() |>
 #> (Bench): 398-Henderson; 199-Tarkowski; 465-Bowen; 391-Surridge
 
 # After making any changes, update your team on the FPL site
-get_my_team() |>
-  team_substitute(p1 = 465, p2 = 166)|>
-  assign_role(pid = 255, role = "c") |>
-  assign_role(pid = 15, role = "vc") |>
+get_my_team() %>%
+  team_substitute(p1 = 465, p2 = 166)%>%
+  assign_role(pid = 255, role = "c") %>%
+  assign_role(pid = 15, role = "vc") %>%
   update_team()
 #> → Creating payload...
 #> → Sending POST request...

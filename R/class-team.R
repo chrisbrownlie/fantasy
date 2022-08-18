@@ -169,10 +169,10 @@ team <- function(players,
   valid_players <- get_players()
 
   # Enrich raw team with players info
-  enriched_team <- team |>
-    left_join(valid_players, by = "id") |>
+  enriched_team <- team %>%
+    left_join(valid_players, by = "id") %>%
     mutate(position = ordered(.data$position, levels = c("GKP", "DEF", "MID", "FWD")),
-           team_position = row_number()) |>
+           team_position = row_number()) %>%
     # Subset the columns to retain most useful
     select(
       .data$id,
@@ -203,7 +203,7 @@ print.team <- function(x, ...) {
     x <- x[match(attr(x, "submission_order"), x$id),]
 
     # Format names and IDs nicely
-    selection <- x |>
+    selection <- x %>%
       mutate(sel_string = paste0(cli::col_yellow(.data$id), "-",
                                  cli::col_cyan(.data$known_as),
                                  ifelse(id == attr(x, "captain"),

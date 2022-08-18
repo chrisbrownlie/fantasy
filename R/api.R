@@ -31,9 +31,9 @@ perform_query <- function(endpoint_url,
   if (!type %in% c("json", "html", "string")) cli::cli_abort("{.arg type} must be one of 'json', 'html' or 'string'")
 
   # Query API
-  response <- httr2::request(endpoint_url) |>
-    httr2::req_retry(max_tries = getOption("FANTASY_MAX_RETRIES", default = 3)) |>
-    httr2::req_headers(...) |>
+  response <- httr2::request(endpoint_url) %>%
+    httr2::req_retry(max_tries = getOption("FANTASY_MAX_RETRIES", default = 3)) %>%
+    httr2::req_headers(...) %>%
     httr2::req_perform()
 
   # Extract content

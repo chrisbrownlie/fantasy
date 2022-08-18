@@ -1,7 +1,7 @@
 test_that("assign_role works", {
 
-  new_team <- valid_team |>
-    assign_role(15, "c") |>
+  new_team <- valid_team %>%
+    assign_role(15, "c") %>%
     assign_role(299, "vc")
 
   expect_s3_class(new_team, "team")

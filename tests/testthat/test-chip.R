@@ -57,8 +57,8 @@ test_that("activate_chip fails when necessary", {
 
 test_that("deactivate_chip and activate_chip are symmetrical", {
 
-  de_freehit_team <- valid_team |>
-    activate_chip("freehit") |>
+  de_freehit_team <- valid_team %>%
+    activate_chip("freehit") %>%
     deactivate_chip("freehit")
 
   expect_identical(valid_team, de_freehit_team)

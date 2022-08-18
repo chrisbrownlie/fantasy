@@ -14,23 +14,23 @@ get_predicted_lineups <- function() {
                            type = "html")
 
   # Extract raw player lineups
-  players <- content |>
-    rvest::html_elements(css = ".formation") |>
-    rvest::html_text2() |>
+  players <- content %>%
+    rvest::html_elements(css = ".formation") %>%
+    rvest::html_text2() %>%
     strsplit("\n")
 
   # Get corresponding team names
-  teams <- content |>
-    rvest::html_elements(css = ".story-wrap") |>
-    rvest::html_element("h2") |>
+  teams <- content %>%
+    rvest::html_elements(css = ".story-wrap") %>%
+    rvest::html_element("h2") %>%
     rvest::html_text2()
 
   names(players) <- teams
 
   # Convert to tibble
-  lineups <- players |>
-    bind_rows() |>
-    mutate(across(everything(), ~paste0(row_number(), .x))) |>
+  lineups <- players %>%
+    bind_rows() %>%
+    mutate(across(everything(), ~paste0(row_number(), .x))) %>%
     tidyr::pivot_longer(everything(),
                         names_to = "team",
                         values_to = "player") %>%
@@ -39,8 +39,8 @@ get_predicted_lineups <- function() {
                             .data$player)),
            player = gsub(pattern = "^\\d+(.*)",
                          replacement = "\\1",
-                         .data$player)) |>
-    select(.data$team, .data$selection, .data$player) |>
+                         .data$player)) %>%
+    select(.data$team, .data$selection, .data$player) %>%
     arrange(.data$team, .data$selection)
 
   lineups

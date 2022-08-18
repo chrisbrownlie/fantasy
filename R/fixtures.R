@@ -30,7 +30,7 @@ get_fixture_list <- function() {
 
   # Construct tibble from all non-stats info
   purrr::map_dfr(fixtures_data,
-                 ~purrr::list_modify(.x, stats = NULL)) |>
+                 ~purrr::list_modify(.x, stats = NULL)) %>%
     # Subset and rename columns for clarity
     transmute(id,
               gameweek = .data$event,
@@ -68,7 +68,7 @@ get_fixture_stats <- function(fixture_id = NULL) {
 
   # For each fixtures' stats element, format as a tibble
   purrr::map_dfr(fixtures_data,
-                 ~purrr::map_dfr(.x$stats, format_stat) |>
+                 ~purrr::map_dfr(.x$stats, format_stat) %>%
                    mutate(fixture_id = .x$id,
                                  .before = 1))
 }
@@ -90,7 +90,7 @@ format_stat <- function(stat) {
   # Get home and away values
   if (length(stat$h)) {
     home_vals <- purrr::map_dfr(stat$h,
-                                tibble::as_tibble_row) |>
+                                tibble::as_tibble_row) %>%
       transmute(
         team = "home",
         player = player_from_id(.data$element),
@@ -101,7 +101,7 @@ format_stat <- function(stat) {
   }
   if (length(stat$a)) {
     away_vals <- purrr::map_dfr(stat$a,
-                                tibble::as_tibble_row) |>
+                                tibble::as_tibble_row) %>%
       transmute(
         team = "away",
         player = player_from_id(.data$element),
@@ -113,7 +113,7 @@ format_stat <- function(stat) {
 
   # Combine home and away and add stat type
   bind_rows(home_vals,
-            away_vals) |>
+            away_vals) %>%
     mutate(stat = stat_name,
            .before = 1)
 }

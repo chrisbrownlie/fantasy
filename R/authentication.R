@@ -67,8 +67,8 @@ authenticate <- function(email,
 
   if (login_response$status_code != 200) cli::cli_abort("Login request was unsuccessful.")
 
-  profile_cookie <- httr::cookies(login_response) |>
-    filter(.data$name == "pl_profile") |>
+  profile_cookie <- httr::cookies(login_response) %>%
+    filter(.data$name == "pl_profile") %>%
     pull(.data$value)
 
   if (!length(profile_cookie)) cli::cli_abort("Login unsuccessful - incorrect email or password.")

@@ -21,9 +21,9 @@ get_my_team <- function() {
                        Cookie = paste0("pl_profile=", getOption("FANTASY_COOKIE")),
                        type = "json")
 
-  raw_team <- rep$picks |>
-    bind_rows() |>
-    arrange(.data$position) |>
+  raw_team <- rep$picks %>%
+    bind_rows() %>%
+    arrange(.data$position) %>%
     select(id = .data$element,
            .data$is_captain,
            .data$is_vice_captain)
@@ -96,15 +96,15 @@ update_team.team <- function(team,
   )
 
   cli::cli_alert("Sending POST request...")
-  rep <- httr2::request("https://fantasy.premierleague.com/api/my-team/7330951/") |>
+  rep <- httr2::request("https://fantasy.premierleague.com/api/my-team/7330951/") %>%
     httr2::req_headers(
       'content-type' = 'application/json',
       'origin' = 'https://fantasy.premierleague.com',
       'referer' = 'https://fantasy.premierleague.com/my-team',
       "Cookie" = paste0("pl_profile=", getOption("FANTASY_COOKIE"))
-    ) |>
-    httr2::req_body_json(data = payload) |>
-    httr2::req_method("POST") |>
+    ) %>%
+    httr2::req_body_json(data = payload) %>%
+    httr2::req_method("POST") %>%
     httr2::req_perform(verbosity = verbose)
 
   if (rep$status_code == 200) {

@@ -11,8 +11,8 @@ get_teams <- function() {
   general <- query_general_data()
 
   # Get teams
-  general$teams |>
-    bind_rows() |>
+  general$teams %>%
+    bind_rows() %>%
     # Rename id col
     rename(team_id = .data$id)
 }
@@ -28,8 +28,8 @@ get_teams <- function() {
 #'
 #' @export
 team_from_id <- function(id, full = FALSE) {
-  teams <- get_teams() |>
-    arrange(.data$team_id) |>
+  teams <- get_teams() %>%
+    arrange(.data$team_id) %>%
     pull(all_of(ifelse(full, "name", "short_name")))
   if (any(!id %in% seq_along(teams))) cli::cli_abort("Invalid team ID(s) - must be between 1-20 inclusive")
   teams[id]

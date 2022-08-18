@@ -11,8 +11,8 @@ get_players <- function() {
   general <- query_general_data()
 
   # Get player data
-  general$elements |>
-    bind_rows() |>
+  general$elements %>%
+    bind_rows() %>%
     # Subset and ensure correct type
     mutate(
       name = sprintf("%s %s", .data$first_name, .data$second_name),
@@ -31,8 +31,8 @@ get_players <- function() {
         TRUE ~ "unknown"
       ),
       cost = as.numeric(.data$now_cost)/10,
-    ) |>
-    select(!any_of(c("first_name", "second_name", "now_cost", "element_type", "photo"))) |>
+    ) %>%
+    select(!any_of(c("first_name", "second_name", "now_cost", "element_type", "photo"))) %>%
     select(
       .data$id,
       .data$name,
@@ -56,7 +56,7 @@ get_players <- function() {
       transfers_out_total = .data$transfers_out,
       expected_points_this_week = .data$ep_this,
       expected_points_next_week = .data$ep_next,
-      .data$minutes:.data$penalties_order) |>
+      .data$minutes:.data$penalties_order) %>%
     mutate(
         across(
           !any_of(c("name", "known_as", "status", "position", "news", "news_added"))&!contains("text"),
@@ -84,33 +84,33 @@ get_player_summary <- function(player_id) {
   player_summary <- perform_query(player_ep)
 
   # Get player team
-  player_team <- get_players() |>
-    filter(.data$id == player_id) |>
-    pull(.data$team) |>
+  player_team <- get_players() %>%
+    filter(.data$id == player_id) %>%
+    pull(.data$team) %>%
     team_from_id()
 
-  future_fixtures <- player_summary$fixtures |>
-    bind_rows() |>
+  future_fixtures <- player_summary$fixtures %>%
+    bind_rows() %>%
     mutate(element_id = .data$player_id,
            team_h = team_from_id(.data$team_h),
            team_a = team_from_id(.data$team_a),
-           kickoff_time = as.POSIXct(.data$kickoff_time)) |>
+           kickoff_time = as.POSIXct(.data$kickoff_time)) %>%
     rename(fixture_id = .data$id,
            at_home = .data$is_home,
            round = .data$event)
 
-  played_fixtures <- player_summary$history |>
-    bind_rows() |>
+  played_fixtures <- player_summary$history %>%
+    bind_rows() %>%
     mutate(team_h = if_else(.data$was_home, .data$player_team, team_from_id(.data$opponent_team)),
            team_a = if_else(.data$was_home, team_from_id(.data$opponent_team), .data$player_team),
-           kickoff_time = as.POSIXct(.data$kickoff_time)) |>
+           kickoff_time = as.POSIXct(.data$kickoff_time)) %>%
     rename(element_id = .data$element,
            fixture_id = .data$fixture,
            at_home = .data$was_home)
 
   # Combine future and previous fixtures
   bind_rows(played_fixtures,
-            future_fixtures) |>
+            future_fixtures) %>%
     select(.data$element_id,
            .data$fixture_id,
            .data$round,
@@ -175,7 +175,7 @@ search_for_player <- function(search) {
   players <- get_players()
 
   # Filter for search
-  players |>
-    filter(grepl(pattern = search, x = .data$name, ignore.case = TRUE)) |>
+  players %>%
+    filter(grepl(pattern = search, x = .data$name, ignore.case = TRUE)) %>%
     transmute(.data$id, .data$name, team = team_from_id(.data$team, full = TRUE))
 }
