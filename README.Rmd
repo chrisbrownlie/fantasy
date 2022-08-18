@@ -102,3 +102,5 @@ get_my_team() |>
 get_predicted_lineups()
 ```
 
+# Acknowledgements
+This package wouldn't be possible without the fantastic work of others such as the developers of the R packages used here - particularly [httr2](https://github.com/r-lib/httr2); [dplyr](https://github.com/tidyverse/dplyr) and [cli](https://github.com/r-lib/cli) Fantasy Premier League themselves. Particular thanks also goes to [Frenzel Timothy for giving the best overview of the Fantasy Premier League API endpoints](https://medium.com/@frenzelts/fantasy-premier-league-api-endpoints-a-detailed-guide-acbd5598eb19).

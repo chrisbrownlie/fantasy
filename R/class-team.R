@@ -142,8 +142,10 @@ validate_team <- function(x) {
 #' @param bank a numeric value indicating the teams remaining balance (in FPL£m)
 #' @param transfers an integer indicating the number of free transfers a
 #' team has remaining
-#' @param chips a named logical vector of length 4, indicating whether each of
-#' the teams chips is available or not
+#' @param chips a named logical vector of length 4, indicating the availability of each
+#' chip. TRUE indicates the chip has not been used and is available. FALSE indicates
+#' that the chip is being used for the current gameweek. NA indicates the chip
+#' is not available to use (i.e. has been used earlier in the season).
 #'
 #' @return a tibble with class `<team>`
 #'
@@ -256,4 +258,20 @@ global_remove_formatting <- function() {
 global_restore_formatting <- function() {
   options("FANTASY_UNFORMAT" = FALSE)
   cli::cli_alert("{.cls team} objects will now be custom formatted. To revert to unformatted output use {.fun global_remove_formatting}")
+}
+
+#' Convert team to data.frame
+#'
+#' Useful for testing or to access the underlying data of a team object
+#'
+#' @param x a team object to convert to a dataframe
+#'
+#' @return the team as a data.frame -i.e. the underlying
+#' team data
+#'
+#' @keywords internal
+team_to_df <- function(x) {
+  class(x) <- "data.frame"
+  attributes(x)[!attributes(x) %in% c("names", "class", "row.names")] <- NULL
+  x
 }

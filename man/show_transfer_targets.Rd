@@ -4,10 +4,10 @@
 \alias{show_transfer_targets}
 \title{Show all potential replacements for a particular player}
 \usage{
-show_transfer_targets(team, p_out)
+show_transfer_targets(x, p_out)
 }
 \arguments{
-\item{team}{an object with class team, the team containing the player to replace}
+\item{x}{an object with class team, the team containing the player to replace}
 
 \item{p_out}{a single integer, the ID of the player in the team to look for replacements for}
 }

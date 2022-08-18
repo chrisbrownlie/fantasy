@@ -6,3 +6,4 @@ valid_team <- team(players = valid_team_ids,
                    bank = 0,
                    transfers = 1,
                    chips = all_chips())
+

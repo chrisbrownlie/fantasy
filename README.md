@@ -143,7 +143,7 @@ get_teams()
 
 # Get all players info
 get_players()
-#> # A tibble: 584 × 56
+#> # A tibble: 589 × 56
 #>       id name         known…¹ posit…²  team team_…³  cost points point…⁴ point…⁵
 #>    <dbl> <chr>        <chr>   <chr>   <dbl>   <dbl> <dbl>  <dbl>   <dbl>   <dbl>
 #>  1     1 Cédric Alve… Cédric  DEF         1       3   4.4      0       0     0  
@@ -152,11 +152,11 @@ get_players()
 #>  4     5 Rob Holding  Holding DEF         1       3   4.4      0       0     0  
 #>  5     6 Thomas Part… Partey  MID         1       3   5        2       5     2.5
 #>  6     7 Martin Ødeg… Ødegaa… MID         1       3   6.5      2       5     2.5
-#>  7     8 Kieran Tier… Tierney DEF         1       3   5        1       2     1  
+#>  7     8 Kieran Tier… Tierney DEF         1       3   4.9      1       2     1  
 #>  8     9 Nicolas Pépé Pépé    MID         1       3   5.4      0       0     0  
 #>  9    10 Benjamin Wh… White   DEF         1       3   4.5      1       6     3  
-#> 10    11 Eddie Nketi… Nketiah FWD         1       3   6.9      1       2     1  
-#> # … with 574 more rows, 46 more variables: cost_change_recent <dbl>,
+#> 10    11 Eddie Nketi… Nketiah FWD         1       3   6.8      1       2     1  
+#> # … with 579 more rows, 46 more variables: cost_change_recent <dbl>,
 #> #   cost_change_from_start <dbl>, form <dbl>, value_form <dbl>,
 #> #   value_season <dbl>, selected_by_pct <dbl>, transfers_in_recent <dbl>,
 #> #   transfers_in_total <dbl>, transfers_out_recent <dbl>,
@@ -197,29 +197,29 @@ authenticate()
 
 # See your team
 get_my_team()
-#> ℹ Team:
-#> GKP: 15-Ramsdale
+#> ℹ Team selection:
+#> GKP: 15-Ramsdale (VC)
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
-#> MID: 283-Salah (C); 428-Son (VC); 305-Grealish; 370-S.Longstaff; 465-Bowen
-#> FWD: 255-Vardy
+#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff; 465-Bowen
+#> FWD: 255-Vardy (C)
 #> (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge
 
 # Swap two players in your team
 # - {fantasy} will automatically handle any restrictions or reordering of your team
 get_my_team() |>
   team_substitute(p1 = 465, p2 = 166)
-#> ℹ Team:
-#> GKP: 15-Ramsdale
+#> ℹ Team selection:
+#> GKP: 15-Ramsdale (VC)
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
-#> MID: 283-Salah (C); 428-Son (VC); 305-Grealish; 370-S.Longstaff
-#> FWD: 166-Edouard; 255-Vardy
+#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff
+#> FWD: 166-Edouard; 255-Vardy (C)
 #> (Bench): 398-Henderson; 199-Tarkowski; 465-Bowen; 391-Surridge
 
 # Change the captain or vice captain
 get_my_team() |>
   assign_role(pid = 255, role = "c") |>
   assign_role(pid = 15, role = "vc")
-#> ℹ Team:
+#> ℹ Team selection:
 #> GKP: 15-Ramsdale (VC)
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
 #> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff; 465-Bowen
@@ -239,8 +239,7 @@ get_my_team() |>
 #> ─ No transfers.
 #> ↑Subs In: Edouard (FWD)
 #> ↓Subs Out: Bowen (MID)
-#> ◉ Captain: Salah -> Vardy
-#> ◎ Vice-Captain: Son -> Ramsdale
+#> ─ No captaincy changes.
 
 ### Non-FPL API functions
 # Get predicted lineups from fantasyfootballscout.co.uk
@@ -261,3 +260,14 @@ get_predicted_lineups()
 #> # … with 210 more rows
 #> # ℹ Use `print(n = ...)` to see more rows
 ```
+
+# Acknowledgements
+
+This package wouldn’t be possible without the fantastic work of others
+such as the developers of the R packages used here - particularly
+[httr2](https://github.com/r-lib/httr2);
+[dplyr](https://github.com/tidyverse/dplyr) and
+[cli](https://github.com/r-lib/cli) Fantasy Premier League themselves.
+Particular thanks also goes to [Frenzel Timothy for giving the best
+overview of the Fantasy Premier League API
+endpoints](https://medium.com/@frenzelts/fantasy-premier-league-api-endpoints-a-detailed-guide-acbd5598eb19).

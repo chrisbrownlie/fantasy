@@ -18,8 +18,10 @@ team(players, captain, vc, bank, transfers, chips)
 \item{transfers}{an integer indicating the number of free transfers a
 team has remaining}
 
-\item{chips}{a named logical vector of length 4, indicating whether each of
-the teams chips is available or not}
+\item{chips}{a named logical vector of length 4, indicating the availability of each
+chip. TRUE indicates the chip has not been used and is available. FALSE indicates
+that the chip is being used for the current gameweek. NA indicates the chip
+is not available to use (i.e. has been used earlier in the season).}
 }
 \value{
 a tibble with class \verb{<team>}

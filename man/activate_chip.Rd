@@ -4,10 +4,12 @@
 \alias{activate_chip}
 \title{Use one of your chips}
 \usage{
-activate_chip(x)
+activate_chip(x, chip)
 }
 \arguments{
 \item{x}{a team object}
+
+\item{chip}{the name of the chip to activate}
 }
 \value{
 the input team with the chip activated

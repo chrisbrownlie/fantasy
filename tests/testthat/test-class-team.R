@@ -121,8 +121,7 @@ test_that("team helper/validator fails with invalid teams", {
          vc = mids[2],
          bank = 0,
          transfers = 1,
-         chips = all_chips()),
-    regexp = "forwards in your starting XI"
+         chips = all_chips())
   )
   # Not 15 players
   expect_error(
@@ -183,7 +182,7 @@ test_that("team helper/validator fails with invalid teams", {
          bank = -10,
          transfers = 1,
          chips = all_chips()),
-    regexp = "bank balance below zero"
+    regexp = "Bank balance cannot be negative"
   )
   # Invalid bank argument
   expect_error(
@@ -197,7 +196,7 @@ test_that("team helper/validator fails with invalid teams", {
   )
 
   # Warning that transfers will cost points
-  expect_snapshot_output(
+  expect_snapshot(
     {
     new_team <- team(players = valid_team_ids,
                      captain = valid_team_ids[1],

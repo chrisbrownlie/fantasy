@@ -29,7 +29,9 @@ get_my_team <- function() {
            is_vice_captain)
 
   bank <- rep$transfers$bank
-  chips <- sapply(rep$chips, function(x) setNames(x$status_for_entry == "available", nm = x$name))
+  chips <- sapply(rep$chips, function(x) setNames(ifelse(!length(x$played_by_entry),
+                                                         TRUE,
+                                                         NA), nm = x$name))
   transfers <- rep$transfers$limit - rep$transfers$made
 
   # Convert to team object and return
@@ -78,7 +80,7 @@ update_team.team <- function(team,
 
   # If changes to be summarised, get current team before update
   if (report_changes) {
-    pre_changes <- get_my_team(manager_id = Sys.getenv("FPL_MANAGER_ID"))
+    pre_changes <- get_my_team()
   }
 
   # Get team payload in format for server

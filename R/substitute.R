@@ -43,7 +43,8 @@ team_substitute.team <- function(team, p1, p2) {
        captain = attr(team, "captain"),
        vc = attr(team, "vc"),
        bank = attr(team, "bank"),
-       transfers = attr(team, "transfers"))
+       transfers = attr(team, "transfers"),
+       chips = attr(team, "chips"))
 
 }
 

@@ -80,6 +80,9 @@
     
 <p>This vignette outlines how you can use the fantasy package to make
 any changes that you would usually make on the FPL website, via R.</p>
+<p>Before you run any of the functions outlined in this article, you
+must first authenticate yourself. See the ‘Authenticating’ article for
+more information</p>
 <div class="section level4">
 <h4 id="the-team-object">The <code>&lt;team&gt;</code> object<a class="anchor" aria-label="anchor" href="#the-team-object"></a>
 </h4>
@@ -88,14 +91,14 @@ any changes that you would usually make on the FPL website, via R.</p>
 class ensures all the validation and output formatting, as well as
 restricting the use of the functions provided in the package, to avoid
 errors.</p>
-<p>All a <team> object is, is a tibble of 15 players, with three key
-attributes: the player ID of the captain, the player ID of the
-vice-captain, and the ‘submission order’ of the team (FPL requires
-players to be in position order, for both the starting XI and the
-bench). In addition to this, there are several restrictions on how the
-team can be constructed and the object is validated after every
+<p>All a <code>&lt;team&gt;</code> object is, is a tibble of 15 players,
+with three key attributes: the player ID of the captain, the player ID
+of the vice-captain, and the ‘submission order’ of the team (FPL
+requires players to be in position order, for both the starting XI and
+the bench). In addition to this, there are several restrictions on how
+the team can be constructed and the object is validated after every
 attempted action - see the <a href="https://www.premierleague.com/news/1252542" class="external-link">FPL Website</a> for
-more information on what these restrictions are.</team></p>
+more information on what these restrictions are.</p>
 <p><strong>IMPORTANT</strong>: Note that no changes will be made to your
 fantasy team until you confirm your changes, and that once this is done
 <em>it cannot be undone</em>. For most actions this does not matter as
