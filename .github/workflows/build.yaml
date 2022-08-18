@@ -69,7 +69,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        r-version: ['3.6.3', '4.1.1', '4.2.1']
+        r-version: ['4.1.1', '4.2.1']
     steps:
     - uses: actions/checkout@v3
     - uses: r-lib/actions/setup-pandoc@v2
