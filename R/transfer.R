@@ -94,9 +94,9 @@ show_transfer_targets <- function(x, p_out) {
   invalid_teams <- names(existing_teams[existing_teams == 3])
 
   players |>
-    filter(cost <= available_funds,
-           position == players$position[players$id == p_out],
-           !team %in% invalid_teams,
-           !id %in% x$id) |>
-    arrange(desc(cost), desc(points_total), desc(selected_by_pct))
+    filter(.data$cost <= available_funds,
+           .data$position == players$position[players$id == p_out],
+           !.data$team %in% invalid_teams,
+           !.data$id %in% x$id) |>
+    arrange(desc(.data$cost), desc(.data$points_total), desc(.data$selected_by_pct))
 }

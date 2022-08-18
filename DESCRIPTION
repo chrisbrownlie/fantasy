@@ -18,7 +18,8 @@ Imports:
   cli,
   purrr,
   rvest,
-  rstudioapi
+  rstudioapi,
+  tidyr
 Suggests: 
     knitr,
     rmarkdown,

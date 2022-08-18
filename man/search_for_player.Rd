@@ -15,7 +15,3 @@ a tibble of potential matches and their player ID
 \description{
 Search for a player ID by name
 }
-\examples{
-search_for_player("Mahrez")
-
-}

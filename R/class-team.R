@@ -171,19 +171,19 @@ team <- function(players,
   # Enrich raw team with players info
   enriched_team <- team |>
     left_join(valid_players, by = "id") |>
-    mutate(position = ordered(position, levels = c("GKP", "DEF", "MID", "FWD")),
+    mutate(position = ordered(.data$position, levels = c("GKP", "DEF", "MID", "FWD")),
            team_position = row_number()) |>
     # Subset the columns to retain most useful
     select(
-      id,
-      name,
-      known_as,
-      position,
-      team,
-      points,
-      points_total,
-      form,
-      cost
+      .data$id,
+      .data$name,
+      .data$known_as,
+      .data$position,
+      .data$team,
+      .data$points,
+      .data$points_total,
+      .data$form,
+      .data$cost
     )
 
   # Validate team (this potentially changes the order of the players)
@@ -204,11 +204,11 @@ print.team <- function(x, ...) {
 
     # Format names and IDs nicely
     selection <- x |>
-      mutate(sel_string = paste0(cli::col_yellow(id), "-",
-                                 cli::col_cyan(known_as),
+      mutate(sel_string = paste0(cli::col_yellow(.data$id), "-",
+                                 cli::col_cyan(.data$known_as),
                                  ifelse(id == attr(x, "captain"),
                                         cli::style_bold(" (C)"),
-                                        ifelse(id == attr(x, "vc"),
+                                        ifelse(.data$id == attr(x, "vc"),
                                                cli::style_bold(" (VC)"),
                                                ""))))
 

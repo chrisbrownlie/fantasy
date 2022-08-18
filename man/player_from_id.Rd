@@ -18,7 +18,3 @@ a string representing a player name
 \description{
 Convert player ID to name
 }
-\examples{
-player_from_id(283, full = TRUE)
-
-}

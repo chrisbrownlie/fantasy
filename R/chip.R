@@ -1,12 +1,14 @@
-#' Use one of your chips
+#' Activate or deactivate one of your chips
 #'
-#' Use this function to activate one of your chips (wildcard,
+#' Activate or deactivate one of your teams chips (wildcard,
 #' bench boost, free hit or triple captain)
 #'
 #' @param x a team object
-#' @param chip the name of the chip to activate
+#' @param chip the name of the chip to activate or deactivate
 #'
-#' @return the input team with the chip activated
+#' @return the input team with the chip activated or deactivated
+#'
+#' @rdname chips
 #'
 #' @export
 activate_chip <- function(x, chip) {
@@ -45,6 +47,7 @@ activate_chip.default <- function(x, chip) {
   cli::cli_abort("{.fun activate_chip} can only be used with an object of class {.cls team}")
 }
 
+#' @rdname chips
 #' @export
 deactivate_chip <- function(x, chip) {
   UseMethod("deactivate_chip")

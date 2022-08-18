@@ -1,4 +1,5 @@
 #' @import dplyr
+#' @importFrom stats setNames
 #' @keywords internal
 "_PACKAGE"
 

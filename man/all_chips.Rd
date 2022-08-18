@@ -4,7 +4,7 @@
 \alias{all_chips}
 \title{Mark all chips as valid}
 \usage{
-all_chips(trip_cap = TRUE, bboost = TRUE, wildcard = TRUE, freehit = TRUE)
+all_chips(triple_cap = TRUE, bboost = TRUE, wildcard = TRUE, freehit = TRUE)
 }
 \value{
 logical vector that can be passed to the chips argument of the

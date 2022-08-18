@@ -23,10 +23,10 @@ get_my_team <- function() {
 
   raw_team <- rep$picks |>
     bind_rows() |>
-    arrange(position) |>
-    select(id = element,
-           is_captain,
-           is_vice_captain)
+    arrange(.data$position) |>
+    select(id = .data$element,
+           .data$is_captain,
+           .data$is_vice_captain)
 
   bank <- rep$transfers$bank
   chips <- sapply(rep$chips, function(x) setNames(ifelse(!length(x$played_by_entry),

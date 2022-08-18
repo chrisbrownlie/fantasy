@@ -33,16 +33,16 @@ get_fixture_list <- function() {
                  ~purrr::list_modify(.x, stats = NULL)) |>
     # Subset and rename columns for clarity
     transmute(id,
-              gameweek = event,
-              finished,
-              kickoff_time = as.POSIXct(kickoff_time),
-              minutes,
-                     home_team = team_from_id(team_h),
-                     home_score = team_h_score,
-                     home_difficulty = team_h_difficulty,
-                     away_team = team_from_id(team_a),
-                     away_score = team_a_score,
-                     away_difficulty = team_a_difficulty)
+              gameweek = .data$event,
+              .data$finished,
+              kickoff_time = as.POSIXct(.data$kickoff_time),
+              .data$minutes,
+              home_team = team_from_id(.data$team_h),
+              home_score = .data$team_h_score,
+              home_difficulty = .data$team_h_difficulty,
+              away_team = team_from_id(.data$team_a),
+              away_score = .data$team_a_score,
+              away_difficulty = .data$team_a_difficulty)
 
 }
 
@@ -93,8 +93,8 @@ format_stat <- function(stat) {
                                 tibble::as_tibble_row) |>
       transmute(
         team = "home",
-        player = player_from_id(element),
-        value
+        player = player_from_id(.data$element),
+        .data$value
       )
   } else {
     home_vals <- tibble::tibble()
@@ -104,8 +104,8 @@ format_stat <- function(stat) {
                                 tibble::as_tibble_row) |>
       transmute(
         team = "away",
-        player = player_from_id(element),
-        value
+        player = player_from_id(.data$element),
+        .data$value
       )
   } else {
     away_vals <- tibble::tibble()
@@ -113,7 +113,7 @@ format_stat <- function(stat) {
 
   # Combine home and away and add stat type
   bind_rows(home_vals,
-                   away_vals) |>
+            away_vals) |>
     mutate(stat = stat_name,
-                  .before = 1)
+           .before = 1)
 }
