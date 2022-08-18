@@ -240,7 +240,7 @@
 <span></span>
 <span><span class="co"># Swap two players in your team</span></span>
 <span><span class="co"># - {fantasy} will automatically handle any restrictions or reordering of your team</span></span>
-<span><span class="fu"><a href="reference/get_my_team.html">get_my_team</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/get_my_team.html">get_my_team</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/team_substitute.html">team_substitute</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">465</span>, p2 <span class="op">=</span> <span class="fl">166</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Team:</span></span>
 <span><span class="co">#&gt; GKP: 15-Ramsdale (VC)</span></span>
@@ -250,8 +250,8 @@
 <span><span class="co">#&gt; (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge</span></span>
 <span></span>
 <span><span class="co"># Change the captain or vice captain</span></span>
-<span><span class="fu"><a href="reference/get_my_team.html">get_my_team</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">255</span>, role <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/get_my_team.html">get_my_team</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">255</span>, role <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">15</span>, role <span class="op">=</span> <span class="st">"vc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Team:</span></span>
 <span><span class="co">#&gt; GKP: 15-Ramsdale (VC)</span></span>
@@ -261,10 +261,10 @@
 <span><span class="co">#&gt; (Bench): 398-Henderson; 199-Tarkowski; 465-Bowen; 391-Surridge</span></span>
 <span></span>
 <span><span class="co"># After making any changes, update your team on the FPL site</span></span>
-<span><span class="fu"><a href="reference/get_my_team.html">get_my_team</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/team_substitute.html">team_substitute</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">465</span>, p2 <span class="op">=</span> <span class="fl">166</span><span class="op">)</span><span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">255</span>, role <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">15</span>, role <span class="op">=</span> <span class="st">"vc"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="reference/get_my_team.html">get_my_team</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/team_substitute.html">team_substitute</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">465</span>, p2 <span class="op">=</span> <span class="fl">166</span><span class="op">)</span><span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">255</span>, role <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">15</span>, role <span class="op">=</span> <span class="st">"vc"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="reference/update_team.html">update_team</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; → Creating payload...</span></span>
 <span><span class="co">#&gt; → Sending POST request...</span></span>
