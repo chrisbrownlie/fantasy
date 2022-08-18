@@ -28,10 +28,17 @@ get_my_team <- function() {
            is_captain,
            is_vice_captain)
 
+  bank <- rep$transfers$bank
+  chips <- sapply(rep$chips, function(x) setNames(x$status_for_entry == "available", nm = x$name))
+  transfers <- rep$transfers$limit - rep$transfers$made
+
   # Convert to team object and return
   team(raw_team$id,
-                 captain = raw_team$id[raw_team$is_captain],
-                 vc = raw_team$id[raw_team$is_vice_captain])
+       captain = raw_team$id[raw_team$is_captain],
+       vc = raw_team$id[raw_team$is_vice_captain],
+       bank = bank,
+       transfers = transfers,
+       chips = chips)
 }
 
 #' Update your team
@@ -199,8 +206,8 @@ summarise_team_changes <- function(previous,
   transfers_out <- previous$id[!previous$id %in% current$id]
 
   # List substitutions
-  subs_in <- current$id[current$id %in% attr(current, "submission_order")[1:11] & !current$id %in% attr(previous, "submission_order")[1:11]]
-  subs_out <- previous$id[previous$id %in% attr(previous, "submission_order")[1:11] & !previous$id %in% attr(current, "submission_order")[1:11]]
+  subs_in <- current$id[current$id %in% attr(current, "submission_order")[1:11] & !current$id %in% attr(previous, "submission_order")[1:11] & !current$id %in% transfers_in]
+  subs_out <- previous$id[previous$id %in% attr(previous, "submission_order")[1:11] & !previous$id %in% attr(current, "submission_order")[1:11]  & !previous$id %in% transfers_out]
 
   cli::cli_alert_info("Team changes:")
 

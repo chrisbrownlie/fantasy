@@ -1,11 +1,5 @@
 test_that("team_substitution works", {
 
-  valid_team_ids <- c(15, 430, 299, 10, 280, 283, 428, 305, 370, 465, 255, 398, 199, 391, 166)
-
-  valid_team <- team(players = valid_team_ids,
-                               captain = valid_team_ids[6],
-                               vc = valid_team_ids[7])
-
   subbed_team <- team_substitute(valid_team,
                                  15,
                                  398)
@@ -17,12 +11,6 @@ test_that("team_substitution works", {
 
 test_that("captain cannot be substituted", {
 
-  valid_team_ids <- c(15, 430, 299, 10, 280, 283, 428, 305, 370, 465, 255, 398, 199, 391, 166)
-
-  valid_team <- team(players = valid_team_ids,
-                               captain = valid_team_ids[6],
-                               vc = valid_team_ids[7])
-
   expect_error(
     team_substitute(valid_team,
                     p1 = valid_team_ids[6],
@@ -32,13 +20,6 @@ test_that("captain cannot be substituted", {
 })
 
 test_that("vice-captain cannot be substituted", {
-
-  valid_team_ids <- c(15, 430, 299, 10, 280, 283, 428, 305, 370, 465, 255, 398, 199, 391, 166)
-
-  valid_team <- team(players = valid_team_ids,
-                               captain = valid_team_ids[6],
-                               vc = valid_team_ids[7])
-
   expect_error(
     team_substitute(valid_team,
                     p1 = valid_team_ids[7],
@@ -48,12 +29,6 @@ test_that("vice-captain cannot be substituted", {
 })
 
 test_that("cannot violate positions when substituting", {
-
-  valid_team_ids <- c(15, 430, 299, 10, 280, 283, 428, 305, 370, 465, 255, 398, 199, 391, 166)
-
-  valid_team <- team(players = valid_team_ids,
-                               captain = valid_team_ids[6],
-                               vc = valid_team_ids[7])
 
   expect_error(
     team_substitute(valid_team,

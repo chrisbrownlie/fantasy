@@ -45,3 +45,14 @@ perform_query <- function(endpoint_url,
     httr2::resp_body_string(response)
   }
 }
+
+#' Mark all chips as valid
+#'
+#' Simple helper for returning a logical vector where all chips are valid -
+#' used mainly for testing.
+#'
+#' @return logical vector that can be passed to the chips argument of the
+#' team constructor
+all_chips <- function() {
+  c("3xc" = TRUE, "bboost" = TRUE, "wildcard" = TRUE, "freehit" = TRUE)
+}

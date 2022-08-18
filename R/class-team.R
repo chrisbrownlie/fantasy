@@ -112,15 +112,15 @@ validate_team <- function(x) {
   # Check that bank balance is not negative
   if (!is.numeric(attr(x, "bank"))) cli::cli_abort("Bank balance must be a single non-negative numeric value")
   if (length(attr(x, "bank"))!=1) cli::cli_abort("Bank balance must be a single non-negative numeric value")
-  if (attr(x, "bank") < 0) cli::cli_abort("This action would take bank balance below zero.")
+  if (attr(x, "bank") < 0) cli::cli_abort("Bank balance cannot be negative.")
 
   # Check that transfers not used up
   if (!is.numeric(attr(x, "transfers"))) cli::cli_abort("Transfers must be a single integer value")
-  if (attr(x, "transfers") < 0) cli::cli_alert_warning("This action is not covered by free transfers so will cost points.")
+  if (attr(x, "transfers") < 0) cli::cli_warn("This action is not covered by free transfers so will cost {.strong {abs(attr(x, 'transfers'))*4}} points.")
 
   # Check that chips has all expected names and is logical
-  if (!is.logical(attr(x, "chips"))|length(chips)!=4|!length(names(chips))) cli::cli_abort("Chips must be a named logical vector of length 4")
-  if (!setequal(names(chips), c("bboost", "3xc", "wildcard", "freehit"))) cli::cli_abort("Chips must be named: 'bboost', '3xc', 'wildcard', 'freehit'")
+  if (!is.logical(attr(x, "chips"))|length(attr(x, "chips"))!=4|!length(names(attr(x, "chips")))) cli::cli_abort("Chips must be a named logical vector of length 4")
+  if (!setequal(names(attr(x, "chips")), c("bboost", "3xc", "wildcard", "freehit"))) cli::cli_abort("Chips must be named: 'bboost', '3xc', 'wildcard', 'freehit'")
 
   x
 }
@@ -191,6 +191,7 @@ team <- function(players,
 
 #' Format function for team selection
 #' @keywords internal
+#' @export
 print.team <- function(x, ...) {
 
   # If team is enriched, print nicely

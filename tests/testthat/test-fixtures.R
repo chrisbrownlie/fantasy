@@ -1,7 +1,6 @@
 test_that("fixtures data can be queried", {
   fixtures <- query_fixtures_data()
 
-  expect_s3_class(fixtures, "tbl_df")
   expect_length(fixtures, 380)
 })
 

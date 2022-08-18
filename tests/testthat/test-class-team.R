@@ -1,8 +1,11 @@
 test_that("team constructor works", {
 
-  new_team <- new_team(1:15,
-                                 8,
-                                 9)
+  new_team <- new_team(players = 1:15,
+                       captain = 8,
+                       vc = 9,
+                       bank = 0,
+                       transfers = 0,
+                       chips = 0)
 
   expect_s3_class(new_team, "team")
   expect_named(new_team, "id")
@@ -11,6 +14,9 @@ test_that("team constructor works", {
   expect_equal(attr(new_team, "captain"), 8)
   expect_equal(attr(new_team, "vc"), 9)
   expect_equal(attr(new_team, "submission_order"), 1:15)
+  expect_equal(attr(new_team, "bank"), 0)
+  expect_equal(attr(new_team, "transfers"), 0)
+  expect_equal(attr(new_team, "chips"), 0)
 })
 
 test_that("team helper/validator works with known valid team", {
@@ -18,8 +24,11 @@ test_that("team helper/validator works with known valid team", {
   valid_team_ids <- c(15, 430, 299, 10, 280, 283, 428, 305, 370, 465, 255, 398, 199, 391, 166)
 
   valid_team <- team(players = valid_team_ids,
-                               captain = valid_team_ids[8],
-                               vc = valid_team_ids[9])
+                     captain = valid_team_ids[8],
+                     vc = valid_team_ids[9],
+                     bank = 0,
+                     transfers = 1,
+                     chips = all_chips())
 
   expect_s3_class(valid_team, "team")
   expect_named(valid_team, c("id", "name", "known_as", "position", "team", "points", "points_total", "form", "cost"))
@@ -27,6 +36,9 @@ test_that("team helper/validator works with known valid team", {
   expect_equal(attr(valid_team, "captain"), 305)
   expect_equal(attr(valid_team, "vc"), 370)
   expect_equal(attr(valid_team, "submission_order"), valid_team_ids)
+  expect_equal(attr(valid_team, "chips"), all_chips())
+  expect_equal(attr(valid_team, "bank"), 0)
+  expect_equal(attr(valid_team, "transfers"), 1)
 })
 
 test_that("team helper/validator works with random valid team", {
@@ -56,8 +68,11 @@ test_that("team helper/validator works with random valid team", {
 
 
   valid_team <- team(players = random_team_ids,
-                               captain = random_team_ids[8],
-                               vc = random_team_ids[9])
+                     captain = random_team_ids[8],
+                     vc = random_team_ids[9],
+                     bank = 0,
+                     transfers = 1,
+                     chips = all_chips())
 
   expect_s3_class(valid_team, "team")
   expect_named(valid_team, c("id", "name", "known_as", "position", "team", "points", "points_total", "form", "cost"))
@@ -88,8 +103,11 @@ test_that("team helper/validator fails with invalid teams", {
   # Incorrect team positions
   expect_error(
     team(players = keepers,
-                   captain = keepers[1],
-                   vc = keepers[2]),
+         captain = keepers[1],
+         vc = keepers[2],
+         bank = 0,
+         transfers = 1,
+         chips = all_chips()),
     regexp = "must select two goalkeepers"
   )
   # Incorrect starting XI positions
@@ -99,29 +117,41 @@ test_that("team helper/validator fails with invalid teams", {
                                mids[1:5],
                                keepers[2],
                                fwds[1:3]),
-                   captain = defs[1],
-                   vc = mids[2]),
+         captain = defs[1],
+         vc = mids[2],
+         bank = 0,
+         transfers = 1,
+         chips = all_chips()),
     regexp = "forwards in your starting XI"
   )
   # Not 15 players
   expect_error(
     team(players = valid_team_ids[1:14],
-                   captain = valid_team_ids[2],
-                   vc = valid_team_ids[7]),
+         captain = valid_team_ids[2],
+         vc = valid_team_ids[7],
+         bank = 0,
+         transfers = 1,
+         chips = all_chips()),
     regexp = "must be length 15"
   )
   # Captain not in team
   expect_error(
     team(players = valid_team_ids,
-                   captain = keepers[3],
-                   vc = valid_team_ids[7]),
+         captain = keepers[3],
+         vc = valid_team_ids[7],
+         bank = 0,
+         transfers = 1,
+         chips = all_chips()),
     regexp = "captain is not one of the players in the team"
   )
   # Vice-captain not in team
   expect_error(
     team(players = valid_team_ids,
-                   captain = valid_team_ids[1],
-                   vc = defs[15]),
+         captain = valid_team_ids[1],
+         vc = defs[15],
+         bank = 0,
+         transfers = 1,
+         chips = all_chips()),
     regexp = "vice-captain is not one of the players in the team"
   )
   # Too many players from one team
@@ -137,8 +167,55 @@ test_that("team helper/validator fails with invalid teams", {
                   villa$id[villa$position == "FWD"][3])
   expect_error(
     team(players = mixed_team,
-                   captain = mixed_team[1],
-                   vc = mixed_team[11]),
+         captain = mixed_team[1],
+         vc = mixed_team[11],
+         bank = 0,
+         transfers = 1,
+         chips = all_chips()),
     regexp = "maximum of three players from any one club"
   )
+
+  # Negative bank
+  expect_error(
+    team(players = valid_team_ids,
+         captain = valid_team_ids[1],
+         vc = valid_team_ids[2],
+         bank = -10,
+         transfers = 1,
+         chips = all_chips()),
+    regexp = "bank balance below zero"
+  )
+  # Invalid bank argument
+  expect_error(
+    team(players = valid_team_ids,
+         captain = valid_team_ids[1],
+         vc = valid_team_ids[2],
+         bank = "loads",
+         transfers = 0,
+         chips = all_chips()),
+    regexp = "single non-negative numeric"
+  )
+
+  # Warning that transfers will cost points
+  expect_snapshot_output(
+    {
+    new_team <- team(players = valid_team_ids,
+                     captain = valid_team_ids[1],
+                     vc = valid_team_ids[2],
+                     bank = 10,
+                     transfers = -1,
+                     chips = all_chips())
+    }
+  )
+  # Invalid transfers argument
+  expect_error(
+    team(players = valid_team_ids,
+         captain = valid_team_ids[1],
+         vc = valid_team_ids[2],
+         bank = 10,
+         transfers = "none",
+         chips = all_chips()),
+    regexp = "single integer value"
+  )
+
 })
