@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 # fantasy
 
 <!-- badges: start -->
+[![build](https://github.com/chrisbrownlie/fantasy/actions/workflows/build.yaml/badge.svg)](https://github.com/chrisbrownlie/fantasy/actions/workflows/build.yaml)
+[![lifecyle](https://img.shields.io/badge/lifecycle-experimental-orange)](https://lifecycle.r-lib.org/articles/stages.html)
 <!-- badges: end -->
 
 {fantasy} is a wrapper for the Fantasy Premier League API. It provides a clean, intuitive set of functions to extract all the key data that is available from the API, as well as enabling actions such as transfers and team changes to be enacted programmatically. 

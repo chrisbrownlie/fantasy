@@ -4,6 +4,9 @@
 # fantasy
 
 <!-- badges: start -->
+
+[![build](https://github.com/chrisbrownlie/fantasy/actions/workflows/build.yaml/badge.svg)](https://github.com/chrisbrownlie/fantasy/actions/workflows/build.yaml)
+[![lifecyle](https://img.shields.io/badge/lifecycle-experimental-orange)](https://lifecycle.r-lib.org/articles/stages.html)
 <!-- badges: end -->
 
 {fantasy} is a wrapper for the Fantasy Premier League API. It provides a
@@ -153,7 +156,7 @@ get_players()
 #>  5     6 Thomas Part… Partey  MID         1       3   5        2       5     2.5
 #>  6     7 Martin Ødeg… Ødegaa… MID         1       3   6.5      2       5     2.5
 #>  7     8 Kieran Tier… Tierney DEF         1       3   4.9      1       2     1  
-#>  8     9 Nicolas Pépé Pépé    MID         1       3   5.4      0       0     0  
+#>  8     9 Nicolas Pépé Pépé    MID         1       3   5.3      0       0     0  
 #>  9    10 Benjamin Wh… White   DEF         1       3   4.5      1       6     3  
 #> 10    11 Eddie Nketi… Nketiah FWD         1       3   6.8      1       2     1  
 #> # … with 579 more rows, 46 more variables: cost_change_recent <dbl>,
@@ -200,9 +203,9 @@ get_my_team()
 #> ℹ Team selection:
 #> GKP: 15-Ramsdale (VC)
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
-#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff; 465-Bowen
-#> FWD: 255-Vardy (C)
-#> (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge
+#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff
+#> FWD: 166-Edouard; 255-Vardy (C)
+#> (Bench): 398-Henderson; 199-Tarkowski; 465-Bowen; 391-Surridge
 
 # Swap two players in your team
 # - {fantasy} will automatically handle any restrictions or reordering of your team
@@ -211,9 +214,9 @@ get_my_team() %>%
 #> ℹ Team selection:
 #> GKP: 15-Ramsdale (VC)
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
-#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff
-#> FWD: 166-Edouard; 255-Vardy (C)
-#> (Bench): 398-Henderson; 199-Tarkowski; 465-Bowen; 391-Surridge
+#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff; 465-Bowen
+#> FWD: 255-Vardy (C)
+#> (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge
 
 # Change the captain or vice captain
 get_my_team() %>%
@@ -222,9 +225,9 @@ get_my_team() %>%
 #> ℹ Team selection:
 #> GKP: 15-Ramsdale (VC)
 #> DEF: 430-Dier; 299-Walker; 10-White; 280-Van Dijk
-#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff; 465-Bowen
-#> FWD: 255-Vardy (C)
-#> (Bench): 398-Henderson; 199-Tarkowski; 166-Edouard; 391-Surridge
+#> MID: 283-Salah; 428-Son; 305-Grealish; 370-S.Longstaff
+#> FWD: 166-Edouard; 255-Vardy (C)
+#> (Bench): 398-Henderson; 199-Tarkowski; 465-Bowen; 391-Surridge
 
 # After making any changes, update your team on the FPL site
 get_my_team() %>%
@@ -237,8 +240,8 @@ get_my_team() %>%
 #> ✔ Team update successful!
 #> ℹ Team changes:
 #> ─ No transfers.
-#> ↑Subs In: Edouard (FWD)
-#> ↓Subs Out: Bowen (MID)
+#> ↑Subs In: Bowen (MID)
+#> ↓Subs Out: Edouard (FWD)
 #> ─ No captaincy changes.
 
 ### Non-FPL API functions

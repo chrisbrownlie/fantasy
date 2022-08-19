@@ -91,7 +91,7 @@ get_player_summary <- function(player_id) {
 
   future_fixtures <- player_summary$fixtures %>%
     bind_rows() %>%
-    mutate(element_id = .data$player_id,
+    mutate(element_id = player_id,
            team_h = team_from_id(.data$team_h),
            team_a = team_from_id(.data$team_a),
            kickoff_time = as.POSIXct(.data$kickoff_time)) %>%
@@ -101,8 +101,8 @@ get_player_summary <- function(player_id) {
 
   played_fixtures <- player_summary$history %>%
     bind_rows() %>%
-    mutate(team_h = if_else(.data$was_home, .data$player_team, team_from_id(.data$opponent_team)),
-           team_a = if_else(.data$was_home, team_from_id(.data$opponent_team), .data$player_team),
+    mutate(team_h = if_else(.data$was_home, player_team, team_from_id(.data$opponent_team)),
+           team_a = if_else(.data$was_home, team_from_id(.data$opponent_team), player_team),
            kickoff_time = as.POSIXct(.data$kickoff_time)) %>%
     rename(element_id = .data$element,
            fixture_id = .data$fixture,
