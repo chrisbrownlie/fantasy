@@ -87,18 +87,6 @@ test_that("team helper/validator fails with invalid teams", {
   players <- get_players()
 
   keepers <- players$id[players$position == "GKP"][round(runif(15, min = 1, max = length(players$id[players$position == "GKP"])))]
-  defs <- players$id[players$position == "DEF"][round(runif(15, min = 1, max = length(players$id[players$position == "DEF"])))]
-  mids <- players$id[players$position == "MID"][round(runif(15, min = 1, max = length(players$id[players$position == "MID"])))]
-  fwds <- players$id[players$position == "FWD"][round(runif(15, min = 1, max = length(players$id[players$position == "FWD"])))]
-
-  valid_team_ids <- c(keepers[1],
-                       defs[1:4],
-                       mids[1:4],
-                       fwds[1:2],
-                       keepers[2],
-                       defs[5],
-                       mids[5],
-                       fwds[3])
 
   # Incorrect team positions
   expect_error(
@@ -112,13 +100,11 @@ test_that("team helper/validator fails with invalid teams", {
   )
   # Incorrect starting XI positions
   expect_error(
-    team(players = c(keepers[1],
-                               defs[1:5],
-                               mids[1:5],
-                               keepers[2],
-                               fwds[1:3]),
-         captain = defs[1],
-         vc = mids[2],
+    team(players = c(valid_team_ids[1:10],
+                     valid_team_ids[12],
+                     valid_team_ids[c(11,13:15)]),
+         captain = valid_team_ids[1],
+         vc = valid_team_ids[2],
          bank = 0,
          transfers = 1,
          chips = all_chips())
@@ -147,7 +133,7 @@ test_that("team helper/validator fails with invalid teams", {
   expect_error(
     team(players = valid_team_ids,
          captain = valid_team_ids[1],
-         vc = defs[15],
+         vc = keepers[2],
          bank = 0,
          transfers = 1,
          chips = all_chips()),
