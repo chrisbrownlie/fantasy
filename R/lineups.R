@@ -36,12 +36,12 @@ get_predicted_lineups <- function() {
                         values_to = "player") %>%
     mutate(selection = as.numeric(gsub(pattern = "^(\\d+).*",
                             replacement = "\\1",
-                            .data$player)),
+                            player)),
            player = gsub(pattern = "^\\d+(.*)",
                          replacement = "\\1",
-                         .data$player)) %>%
-    select(.data$team, .data$selection, .data$player) %>%
-    arrange(.data$team, .data$selection)
+                         player)) %>%
+    select(team, selection, player) %>%
+    arrange(team, selection)
 
   lineups
 }

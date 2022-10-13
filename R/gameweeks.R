@@ -32,7 +32,7 @@ get_gameweek_info <- function(gw = NULL) {
                  })
 
   if (length(gw)) {
-    filter(all_weeks, .data$gameweek %in% gw)
+    filter(all_weeks, gameweek %in% gw)
   } else {
     all_weeks
   }
@@ -45,7 +45,7 @@ get_gameweek_info <- function(gw = NULL) {
 #' @return integer denoting the current gameweek ID
 get_current_gameweek <- function() {
   get_gameweek_info() %>%
-    dplyr::filter(.data$deadline > Sys.time()) %>%
-    dplyr::pull(.data$id) %>%
+    dplyr::filter(deadline > Sys.time()) %>%
+    dplyr::pull(id) %>%
     min()
 }

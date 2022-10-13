@@ -15,49 +15,49 @@ get_players <- function() {
     bind_rows() %>%
     # Subset and ensure correct type
     mutate(
-      name = sprintf("%s %s", .data$first_name, .data$second_name),
+      name = sprintf("%s %s", first_name, second_name),
       position = case_when(
-        .data$element_type == 1 ~ "GKP",
-        .data$element_type == 2 ~ "DEF",
-        .data$element_type == 3 ~ "MID",
-        .data$element_type == 4 ~ "FWD",
+        element_type == 1 ~ "GKP",
+        element_type == 2 ~ "DEF",
+        element_type == 3 ~ "MID",
+        element_type == 4 ~ "FWD",
         TRUE ~ "UNK"
       ),
       status = case_when(
-        .data$status == "a" ~ "available",
-        .data$status == "u" ~ "unavailable",
-        .data$status == "i" ~ "injured",
-        .data$status == "d" ~ "doubtful",
+        status == "a" ~ "available",
+        status == "u" ~ "unavailable",
+        status == "i" ~ "injured",
+        status == "d" ~ "doubtful",
         TRUE ~ "unknown"
       ),
-      cost = as.numeric(.data$now_cost)/10,
+      cost = as.numeric(now_cost)/10,
     ) %>%
     select(!any_of(c("first_name", "second_name", "now_cost", "element_type", "photo"))) %>%
     select(
-      .data$id,
-      .data$name,
-      known_as = .data$web_name,
-      .data$position,
-      .data$team,
-      .data$team_code,
-      .data$status,
-      .data$cost,
-      points = .data$event_points,
-      points_total = .data$total_points,
-      .data$points_per_game,
-      cost_change_recent = .data$cost_change_event,
-      cost_change_from_start = .data$cost_change_start,
-      .data$form,
-      .data$value_form,
-      .data$value_season,
-      selected_by_pct = .data$selected_by_percent,
-      transfers_in_recent = .data$transfers_in_event,
-      transfers_in_total = .data$transfers_in,
-      transfers_out_recent = .data$transfers_out_event,
-      transfers_out_total = .data$transfers_out,
-      expected_points_this_week = .data$ep_this,
-      expected_points_next_week = .data$ep_next,
-      .data$minutes:.data$penalties_order) %>%
+      id,
+      name,
+      known_as = web_name,
+      position,
+      team,
+      team_code,
+      status,
+      cost,
+      points = event_points,
+      points_total = total_points,
+      points_per_game,
+      cost_change_recent = cost_change_event,
+      cost_change_from_start = cost_change_start,
+      form,
+      value_form,
+      value_season,
+      selected_by_pct = selected_by_percent,
+      transfers_in_recent = transfers_in_event,
+      transfers_in_total = transfers_in,
+      transfers_out_recent = transfers_out_event,
+      transfers_out_total = transfers_out,
+      expected_points_this_week = ep_this,
+      expected_points_next_week = ep_next,
+      minutes:penalties_order) %>%
     mutate(
         across(
           !any_of(c("name", "known_as", "status", "position", "news", "news_added"))&!contains("text"),
@@ -86,44 +86,44 @@ get_player_summary <- function(player_id) {
 
   # Get player team
   player_team <- get_players() %>%
-    filter(.data$id == player_id) %>%
-    pull(.data$team) %>%
+    filter(id == player_id) %>%
+    pull(team) %>%
     team_from_id()
 
   future_fixtures <- player_summary$fixtures %>%
     bind_rows() %>%
     mutate(element_id = player_id,
-           team_h = team_from_id(.data$team_h),
-           team_a = team_from_id(.data$team_a),
-           kickoff_time = as.POSIXct(.data$kickoff_time)) %>%
-    rename(fixture_id = .data$id,
-           at_home = .data$is_home,
-           round = .data$event)
+           team_h = team_from_id(team_h),
+           team_a = team_from_id(team_a),
+           kickoff_time = as.POSIXct(kickoff_time)) %>%
+    rename(fixture_id = id,
+           at_home = is_home,
+           round = event)
 
   played_fixtures <- player_summary$history %>%
     bind_rows() %>%
-    mutate(team_h = if_else(.data$was_home, player_team, team_from_id(.data$opponent_team)),
-           team_a = if_else(.data$was_home, team_from_id(.data$opponent_team), player_team),
-           kickoff_time = as.POSIXct(.data$kickoff_time)) %>%
-    rename(element_id = .data$element,
-           fixture_id = .data$fixture,
-           at_home = .data$was_home)
+    mutate(team_h = if_else(was_home, player_team, team_from_id(opponent_team)),
+           team_a = if_else(was_home, team_from_id(opponent_team), player_team),
+           kickoff_time = as.POSIXct(kickoff_time)) %>%
+    rename(element_id = element,
+           fixture_id = fixture,
+           at_home = was_home)
 
   # Combine future and previous fixtures
   bind_rows(played_fixtures,
             future_fixtures) %>%
-    select(.data$element_id,
-           .data$fixture_id,
-           .data$round,
-           .data$kickoff_time,
-           .data$at_home,
-           .data$team_h,
-           .data$team_h_score,
-           .data$team_a,
-           .data$team_a_score,
-           .data$total_points,
-           .data$difficulty,
-           .data$minutes:.data$transfers_out)
+    select(element_id,
+           fixture_id,
+           round,
+           kickoff_time,
+           at_home,
+           team_h,
+           team_h_score,
+           team_a,
+           team_a_score,
+           total_points,
+           difficulty,
+           minutes:transfers_out)
 
 }
 
@@ -180,8 +180,8 @@ search_for_player <- function(search) {
 
   # Filter for search
   players %>%
-    filter(grepl(pattern = search, x = .data$name, ignore.case = TRUE)) %>%
-    transmute(.data$id, .data$name, team = team_from_id(.data$team, full = TRUE))
+    filter(grepl(pattern = search, x = name, ignore.case = TRUE)) %>%
+    transmute(id, name, team = team_from_id(team, full = TRUE))
 }
 
 #' Get the cost for a given player
@@ -193,6 +193,6 @@ search_for_player <- function(search) {
 #' @export
 get_player_cost <- function(pid) {
   get_players() %>%
-    filter(.data$id == pid) %>%
-    pull(.data$cost)
+    filter(id == pid) %>%
+    pull(cost)
 }

@@ -82,7 +82,7 @@ get_my_leagues <- function(private_only = TRUE) {
     bind_rows()
 
   if (private_only) {
-    filter(classic_league_tbl, .data$league_type == "x")
+    filter(classic_league_tbl, league_type == "x")
   } else {
     classic_league_tbl
   }
@@ -107,12 +107,12 @@ get_league <- function(league_id, return_rows = 50) {
 
   all_standings <- league_raw$results %>%
     bind_rows() %>%
-    select(position = .data$rank,
-           player_id = .data$id,
-           player_name = .data$player_name,
-           team_name = .data$entry_name,
-           points = .data$total,
-           gameweek_points = .data$event_total)
+    select(position = rank,
+           player_id = id,
+           player_name = player_name,
+           team_name = entry_name,
+           points = total,
+           gameweek_points = event_total)
 
   cli::cli_warn(paste0("Iterating through league pages to get top ", return_rows, " entries."))
   while(league_raw$has_next & nrow(all_standings) <= return_rows) {
@@ -124,12 +124,12 @@ get_league <- function(league_id, return_rows = 50) {
 
     standings <- league_raw$results %>%
       bind_rows() %>%
-      select(position = .data$rank,
-             player_id = .data$id,
-             player_name = .data$player_name,
-             team_name = .data$entry_name,
-             points = .data$total,
-             gameweek_points = .data$event_total)
+      select(position = rank,
+             player_id = id,
+             player_name = player_name,
+             team_name = entry_name,
+             points = total,
+             gameweek_points = event_total)
 
     all_standings <- bind_rows(all_standings, bind_rows(standings))
     page <- league_raw$page+1
