@@ -137,6 +137,9 @@ get_player_summary <- function(player_id) {
 #'
 #' @export
 player_from_id <- function(id, full = FALSE) {
+
+  if (!length(id)) return(NA)
+
   players <- get_players()
   single_player <- function(pl_id, plyrs, fll) {
     if (fll) {

@@ -48,20 +48,7 @@ authenticate <- function(email,
       "app" = "plfpl-web"),
     encode = "form",
     httr::add_headers(
-      "Accept" = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-      "Accept-Encoding" = "gzip, deflate, br",
       "Accept-Language" = "en-GB,en;q=0.5",
-      "Connection" = "keep-alive",
-      "Content-Type" = "application/x-www-form-urlencoded",
-      "Host" = "users.premierleague.com",
-      "Origin" = "https://fantasy.premierleague.com",
-      "Referer" = "https://fantasy.permierleague.com/",
-      "Sec-Fetch-Dest" = "document",
-      "Sec-Fetch-Mode" = "navigate",
-      "Sec-Fetch-Site" = "same-site",
-      "Sec-Fetch-User" = "?1",
-      "TE" = "trailers",
-      "Upgrade-Insecure-Requests" = "1",
       "User-Agent" = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0"
     ))
 
@@ -99,7 +86,8 @@ authenticate <- function(email,
 #'
 #' @keywords internal
 require_authentication <- function() {
-  if (!length(getOption("FANTASY_COOKIE"))) cli::cli_abort("You need to login using {.fun authenticate} first.")
+  if (!length(getOption("FANTASY_COOKIE"))) authenticate()
+  invisible(NULL)
 }
 
 #' Get a logged in users manager ID and save to environment variable
