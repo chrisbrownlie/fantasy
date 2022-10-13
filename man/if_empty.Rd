@@ -7,7 +7,7 @@
 if_empty(object, replace = NA)
 }
 \arguments{
-\item{object}{to check for emptiiness}
+\item{object}{to check for emptiness}
 
 \item{replace}{what to use if object is empty}
 }

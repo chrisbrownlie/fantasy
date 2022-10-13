@@ -48,7 +48,7 @@ user_friendly <- function(abbr) {
 
 #' If empty then replace
 #'
-#' @param object to check for emptiiness
+#' @param object to check for emptiness
 #' @param replace what to use if object is empty
 #'
 #' @return object, or replace if object is empty
