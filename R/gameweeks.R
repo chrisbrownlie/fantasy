@@ -37,3 +37,15 @@ get_gameweek_info <- function(gw = NULL) {
     all_weeks
   }
 }
+
+#' Get current gameweek
+#'
+#' Get the current gameweek ID
+#'
+#' @return integer denoting the current gameweek ID
+get_current_gameweek <- function() {
+  get_gameweek_info() %>%
+    dplyr::filter(deadline > Sys.time()) %>%
+    dplyr::pull(id) %>%
+    min()
+}
