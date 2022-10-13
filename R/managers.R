@@ -82,7 +82,7 @@ get_my_leagues <- function(private_only = TRUE) {
     bind_rows()
 
   if (private_only) {
-    filter(classic_league_tbl, league_type == "x")
+    filter(classic_league_tbl, .data$league_type == "x")
   } else {
     classic_league_tbl
   }
@@ -93,11 +93,11 @@ get_my_leagues <- function(private_only = TRUE) {
 #' Return a league as a tibble, with information on points scored
 #'
 #' @param league_id the ID of the league to return
-#' @param show_more logical, if TRUE will return the top 500, otherwise if
-#' FALSE will return only the top 50
+#' @param return_rows the number of rows to return, defaults to 50 to avoid
+#' long-running queries
 #'
 #' @return a tibble of the league
-get_league <- function(league_id, all_results = FALSE) {
+get_league <- function(league_id, return_rows = 50) {
 
   # Get league
   league_raw <- paste0("leagues-classic/", league_id, "/standings") %>%
@@ -114,29 +114,26 @@ get_league <- function(league_id, all_results = FALSE) {
            points = .data$total,
            gameweek_points = .data$event_total)
 
-  if (league_raw$has_next) {
-    if (!all_results & league_raw$has_next) {
-      cli::cli_warn("This league has more than 50 entries, so only the top 50 will be returned. Use {.arg show_more}=TRUE to show top 500.")
-    } else if (all_results & league_raw$has_next) {
-      cli::cli_warn("Iterating through first 10 league pages to get top 500 standings.")
-      while(league_raw$has_next & page<=10) {
-        league_raw <- paste0("leagues-classic/", league_id, "/standings?page_standings=", page) %>%
-          construct() %>%
-          perform_query() %>%
-          `$`(standings)
-        standings <- league_raw %>%
-          `$`(results) %>%
-          bind_rows() %>%
-          select(position = .data$rank,
-                 player_id = .data$id,
-                 player_name = .data$player_name,
-                 team_name = .data$entry_name,
-                 points = .data$total,
-                 gameweek_points = .data$event_total)
-        all_standings <- bind_rows(all_standings, bind_rows(standings))
-        page <- league_raw$page+1
-      }
-    }
+  cli::cli_warn(paste0("Iterating through league pages to get top ", return_rows, " entries."))
+  while(league_raw$has_next & nrow(all_standings) <= return_rows) {
+    cli::cli_alert(paste0("Page ", page, "..."))
+    league_raw <- paste0("leagues-classic/", league_id, "/standings?page_standings=", page) %>%
+      construct() %>%
+      perform_query() %>%
+      `$`(standings)
+
+    standings <- league_raw$results %>%
+      bind_rows() %>%
+      select(position = .data$rank,
+             player_id = .data$id,
+             player_name = .data$player_name,
+             team_name = .data$entry_name,
+             points = .data$total,
+             gameweek_points = .data$event_total)
+
+    all_standings <- bind_rows(all_standings, bind_rows(standings))
+    page <- league_raw$page+1
   }
+  if (nrow(all_standings) < return_rows) cli::cli_warn("{.arg return_rows} was greater than the total number of entries.")
   all_standings
 }
