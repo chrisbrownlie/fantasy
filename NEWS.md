@@ -1,4 +1,4 @@
-# fantasy 0.0.0.9000
+# fantasy 0.1.0
 
 * Add <team> object class with necessary validation for FPL teams
 * Add functions for main API endpoints

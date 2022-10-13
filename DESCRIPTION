@@ -1,6 +1,6 @@
 Package: fantasy
 Title: Fantasy Premier League API Wrapper
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person(given = "Chris", family = "Brownlie", email = "chris.brownlie@hotmail.co.uk", role = c("aut", "cre"))
 Description: Functions for interacting with the Fantasy Premier League API, enabling 
