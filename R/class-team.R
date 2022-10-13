@@ -99,10 +99,12 @@ validate_team <- function(x) {
     x <- x[c(starting_pos_order, 12:15),]
   }
 
-  # Check the order of players on the bench and change to make it correct
-  bench_pos_order <- order(x$position[12:15])
-  if (!identical(bench_pos_order, 1:4)) {
-    x <- x[c(1:11, 11+bench_pos_order),]
+  # Check keeper first position on bench
+  if (x$position[12] != "GKP") {
+    # Indicates keeper not first but should be
+    keeper_pos <- which(x$position[12:15] == "GKP")
+    bench_order <- c(keeper_pos, which(x$position[12:15] != "GKP"))
+    x <- x[c(1:11, 11+bench_order),]
   }
 
   # Update submission order attribute with position-correct order
