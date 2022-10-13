@@ -74,7 +74,9 @@ team_transfer.default <- function(x, p_out, p_in) {
 #'
 #' @return a tibble of players who could potentially be transferred in for the
 #' player
-show_transfer_targets <- function(x, p_out) {
+#'
+#' @export
+get_transfer_targets <- function(x, p_out) {
 
   # Check argument types
   if (!is_team(x)) cli::cli_abort("{.arg x} must be an object of class {.cls team}")
