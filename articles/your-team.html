@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">fantasy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,18 +90,89 @@
 <div class="section level2">
 <h2 id="making-a-substitution">Making a substitution<a class="anchor" aria-label="anchor" href="#making-a-substitution"></a>
 </h2>
+<p>To make a substitution, you need the IDs of the two players you want to swap. Note that here, a substitution is just a swap of two players in your squad. This means you can also use the substitution function to change the order of players on your bench.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_team</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_my_team.html">get_my_team</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">my_team</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Sub the keeper</span></span>
+<span><span class="va">my_team</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/team_substitute.html">team_substitute</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">376</span>,</span>
+<span>                  p2 <span class="op">=</span> <span class="fl">398</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Swap bench order</span></span>
+<span><span class="va">my_team</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/team_substitute.html">team_substitute</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">237</span>,</span>
+<span>                  p2 <span class="op">=</span> <span class="fl">199</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="changing-captain-or-vice-captain">Changing captain or vice-captain<a class="anchor" aria-label="anchor" href="#changing-captain-or-vice-captain"></a>
 </h2>
+<p>Setting your captain or vice-captain can be done by assigning the roles using the <code><a href="../reference/assign_role.html">assign_role()</a></code> function.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set Salah as captain</span></span>
+<span><span class="va">my_team</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">283</span>,</span>
+<span>              role <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Set Pope as vice-captain</span></span>
+<span><span class="va">my_team</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">376</span>,</span>
+<span>              role <span class="op">=</span> <span class="st">"vc"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="making-a-transfer">Making a transfer<a class="anchor" aria-label="anchor" href="#making-a-transfer"></a>
 </h2>
+<p>Transfers can be made without using the <code><a href="../reference/update_team.html">update_team()</a></code> function as many times as you’d like, this gives you the opportunity to see what your team would look like before confirming your changes. Similiarly, this is useful for when you want to use your wildcard or free hit.</p>
+<p>{fantasy} also provides a helper function for identifying potential transfer targets. This function - <code>show_transfer_targets()</code> takes in the ID of a current squad player and returns a tibble of players who are a) the same position and b) affordable for the team, arranged by cost, points and selection %. The tibble gives all the available statistics for the players.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show all potential replacements for Mo Salah</span></span>
+<span><span class="fu"><a href="../reference/get_transfer_targets.html">get_transfer_targets</a></span><span class="op">(</span><span class="va">my_team</span>,</span>
+<span>                     p_out <span class="op">=</span> <span class="fl">283</span><span class="op">)</span></span></code></pre></div>
+<p>You can use the returned tibble to get the ID of the player you want to transfer in:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Transfer in Raheem Sterling for Mo Salah</span></span>
+<span><span class="va">my_team</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/team_transfer.html">team_transfer</a></span><span class="op">(</span>p_out <span class="op">=</span> <span class="fl">283</span>,</span>
+<span>                p_in <span class="op">=</span> <span class="fl">304</span><span class="op">)</span></span></code></pre></div>
+<p>If you try to make an invalid transfer, the package will not allow it.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_team</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/team_transfer.html">team_transfer</a></span><span class="op">(</span>p_out <span class="op">=</span> <span class="fl">370</span>,</span>
+<span>                p_in <span class="op">=</span> <span class="fl">304</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="confirming-your-changes">Confirming your changes<a class="anchor" aria-label="anchor" href="#confirming-your-changes"></a>
 </h2>
+<p>Before using the <code><a href="../reference/update_team.html">update_team()</a></code> function, it is <strong>strongly</strong> recommended that you review your changes with the <code><a href="../reference/summarise_team_changes.html">summarise_team_changes()</a></code> function. This will notify you of any changes you have made.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">new_team</span> <span class="op">&lt;-</span> <span class="va">my_team</span>  <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Sub keeper</span></span>
+<span>  <span class="fu"><a href="../reference/team_substitute.html">team_substitute</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">376</span>,</span>
+<span>                  p2 <span class="op">=</span> <span class="fl">398</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Swap bench order</span></span>
+<span>  <span class="fu"><a href="../reference/team_substitute.html">team_substitute</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">237</span>,</span>
+<span>                  p2 <span class="op">=</span> <span class="fl">199</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Set Martinelli to captain</span></span>
+<span>  <span class="fu"><a href="../reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">19</span>,</span>
+<span>              role <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Set newly subbed-in keeper (Henderson) as vice-captain</span></span>
+<span>  <span class="fu"><a href="../reference/assign_role.html">assign_role</a></span><span class="op">(</span>pid <span class="op">=</span> <span class="fl">398</span>,</span>
+<span>              role <span class="op">=</span> <span class="st">"vc"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Replace Salah with Sterling</span></span>
+<span>  <span class="fu"><a href="../reference/team_transfer.html">team_transfer</a></span><span class="op">(</span>p_out <span class="op">=</span> <span class="fl">283</span>,</span>
+<span>                p_in <span class="op">=</span> <span class="fl">304</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compare with the original team</span></span>
+<span><span class="fu"><a href="../reference/summarise_team_changes.html">summarise_team_changes</a></span><span class="op">(</span>current <span class="op">=</span> <span class="va">new_team</span>,</span>
+<span>                       previous <span class="op">=</span> <span class="va">my_team</span><span class="op">)</span></span></code></pre></div>
+<p>Note that changes to order (e.g. in the code chunk above, shuffling the bench and putting Tarkowski as first sub) are not reported by <code><a href="../reference/summarise_team_changes.html">summarise_team_changes()</a></code>. But this can be verified by simply viewing the team again.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">new_team</span></span></code></pre></div>
+<p>If you are happy with your new team and the various changes, you can confirm these changes with the update_team() function.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">new_team</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="../reference/update_team.html">update_team</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="using-your-wildcard-triple-captain-or-sub-boost">Using your wildcard, triple captain or sub boost<a class="anchor" aria-label="anchor" href="#using-your-wildcard-triple-captain-or-sub-boost"></a>

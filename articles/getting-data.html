@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">fantasy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,32 +79,45 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chrisbrownlie.github.io/fantasy/">fantasy</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Enabling function caching...</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chrisbrownlie.github.io/fantasy/">fantasy</a></span><span class="op">)</span></span></code></pre></div>
 <p>One of the ways to use {fantasy} is for extracting data from the FPL API for further analysis. This might be in order to analyse good players to sign, track your progress over the season, or even build a machine learning model to make team decisions for you. There are a few different types of data that can be extracted.</p>
+<p>The sections below show the most useful functions for extracting data - note that none of these require authentication so can be used without account details.</p>
 <div class="section level2">
 <h2 id="fixtures">Fixtures<a class="anchor" aria-label="anchor" href="#fixtures"></a>
 </h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get a list of all fixtures for the season, with scores, gameweek and difficulty.</span></span>
+<span><span class="fu"><a href="../reference/get_fixture_list.html">get_fixture_list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get a (long) table of stats for each game, including:</span></span>
+<span><span class="co"># goals, penalties assists, cards, saves etc.</span></span>
+<span><span class="fu"><a href="../reference/get_fixture_stats.html">get_fixture_stats</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get information on all the gameweeks</span></span>
+<span><span class="fu"><a href="../reference/get_gameweek_info.html">get_gameweek_info</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get the current gameweek</span></span>
+<span><span class="fu"><a href="../reference/get_current_gameweek.html">get_current_gameweek</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="teams">Teams<a class="anchor" aria-label="anchor" href="#teams"></a>
+<h2 id="teams-premier-league-teams">Teams (Premier League teams)<a class="anchor" aria-label="anchor" href="#teams-premier-league-teams"></a>
 </h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get premier league teams with their record so far this season and various strength ratings</span></span>
+<span><span class="fu"><a href="../reference/get_teams.html">get_teams</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get the likely starting XIs for the next gameweek, from fantasyfootballscout.co.uk</span></span>
+<span><span class="fu"><a href="../reference/get_predicted_lineups.html">get_predicted_lineups</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="players">Players<a class="anchor" aria-label="anchor" href="#players"></a>
 </h2>
-</div>
-<div class="section level2">
-<h2 id="leagues">Leagues<a class="anchor" aria-label="anchor" href="#leagues"></a>
-</h2>
-</div>
-<div class="section level2">
-<h2 id="managersusers">Managers/Users<a class="anchor" aria-label="anchor" href="#managersusers"></a>
-</h2>
-</div>
-<div class="section level2">
-<h2 id="predicted-lineups-alternative-source">Predicted lineups (alternative source)<a class="anchor" aria-label="anchor" href="#predicted-lineups-alternative-source"></a>
-</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Get all players and their info</span></span>
+<span><span class="fu"><a href="../reference/get_players.html">get_players</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get season summary for a specific player</span></span>
+<span><span class="fu"><a href="../reference/get_player_summary.html">get_player_summary</a></span><span class="op">(</span>player_id <span class="op">=</span> <span class="fl">273</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
