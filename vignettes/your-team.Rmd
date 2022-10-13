@@ -11,9 +11,8 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  cache = TRUE
+  eval = FALSE
 )
-library(fantasy)
 ```
 
 This vignette outlines how you can use the fantasy package to make any changes that you would usually make on the FPL website, via R. 

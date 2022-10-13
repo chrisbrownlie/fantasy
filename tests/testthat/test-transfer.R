@@ -5,7 +5,7 @@ test_that("team_transfer works", {
                                     p_in = 13)
 
   expect_setequal(transferred_team$id, c(valid_team$id[valid_team$id != 465], 13))
-  expect_equal(attr(transferred_team, "bank"), 0.5)
+  expect_equal(attr(transferred_team, "bank"), 0.4)
 })
 
 test_that("team_transfer fails when not enough money", {
@@ -34,12 +34,12 @@ test_that("team_transfer fails when trying to transfer captain or vice captain",
   )
 })
 
-test_that("show_transfer_targets works as expected", {
+test_that("get_transfer_targets works as expected", {
 
   players <- get_players()
   player_cost <- players$cost[players$id == 283]
 
-  targets <- show_transfer_targets(x = valid_team,
+  targets <- get_transfer_targets(x = valid_team,
                                    p_out = 283)
 
   expect_s3_class(targets, "tbl_df")

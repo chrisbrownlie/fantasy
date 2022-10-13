@@ -4,13 +4,13 @@
 \alias{get_league}
 \title{Get league}
 \usage{
-get_league(league_id, all_results = FALSE)
+get_league(league_id, return_rows = 50)
 }
 \arguments{
 \item{league_id}{the ID of the league to return}
 
-\item{show_more}{logical, if TRUE will return the top 500, otherwise if
-FALSE will return only the top 50}
+\item{return_rows}{the number of rows to return, defaults to 50 to avoid
+long-running queries}
 }
 \value{
 a tibble of the league

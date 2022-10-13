@@ -10,17 +10,24 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
-```{r setup}
-library(fantasy)
-```
-This article gives some end-to-end examples of how the {fantasy} package could be used.
+This article gives a brief description of how some example tasks might be completed with the fantasy package.
 
 ## Analysing the best value for money
+Possible
+- Read in and visualise player info with `get_players()`
+- See each players individual contributions this season with `get_fixture_stats()`
+- Look at upcoming fixtures with `get_fixture_list()`
+- Investigate individual season progression with `get_player_summary()`
 
 ## Automating injury-avoidance
-
-## Identifying the optimal setup for your team
+- Schedule R script to run that checks your team for injuries:
+- Read in team with `get_my_team()`
+- Use `get_players()` to identify injured players (status column)
+- Check which of your squad aren't expected to start with `get_predicted_lineups()`
+- Identify possible replacements with `get_transfer_targets()` and set conditions for using wildcard/free-hit with `activate_chip()`
+- Confirm the changes with `update_team()`

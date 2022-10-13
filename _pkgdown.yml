@@ -33,14 +33,14 @@ reference:
   - title: Extract data
     desc:  Request data from the FPL API
   - contents:
-    - starts_with("get_")
+    -
   - title: Manage your team
   - contents:
     - authenticate
     - get_my_team
     - assign_role
     - team_substitute
-    - show_transfer_targets
+    - get_transfer_targets
     - team_transfer
     - activate_chip
     - summarise_team_changes
