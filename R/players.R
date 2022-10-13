@@ -40,6 +40,7 @@ get_players <- function() {
       .data$position,
       .data$team,
       .data$team_code,
+      .data$status,
       .data$cost,
       points = .data$event_points,
       points_total = .data$total_points,
@@ -192,6 +193,6 @@ search_for_player <- function(search) {
 #' @export
 get_player_cost <- function(pid) {
   get_players() %>%
-    filter(id == pid) %>%
-    pull(cost)
+    filter(.data$id == pid) %>%
+    pull(.data$cost)
 }
