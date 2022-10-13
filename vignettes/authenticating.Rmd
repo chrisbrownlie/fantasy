@@ -46,6 +46,6 @@ authenticate()
 ## How it works
 The authentication function works by sending a POST request to the FPL API and storing the resulting authentication cookie as an option for the session. This cookie is then used whenever a restricted action is taken.
 
-You can see the cookie by running `getOption("FANTASY_COOKIE")`. If you unset or remove this, you will need to reauthenticate.
+You can see the cookie by running `getOption("FANTASY_COOKIE")`. If you unset or remove this, you will need to re-authenticate.
 
 As the authentication cookie is only temporary, you will have to authenticate in every R session you run. However, you can use the Environment Variables method above to avoid having to enter your credentials every time.

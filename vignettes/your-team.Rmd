@@ -10,10 +10,12 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  cache = TRUE
 )
+library(fantasy)
 ```
- 
+
 This vignette outlines how you can use the fantasy package to make any changes that you would usually make on the FPL website, via R. 
 
 Before you run any of the functions outlined in this article, you must first authenticate yourself. See the 'Authenticating' article for more information
@@ -26,11 +28,102 @@ All a `<team>` object is, is a tibble of 15 players, with three key attributes: 
 **IMPORTANT**: Note that no changes will be made to your fantasy team until you confirm your changes, and that once this is done *it cannot be undone*. For most actions this does not matter as you can make a substitution or change your captain as many times as you want, but if you make a transfer it **will** count towards your transfer quota (which for most gameweeks is 1). The `update_team()` function will by default ask for confirmation when you confirm a transfer but it is worth making sure you understand this - {fantasy} will not be to blame if you confirm a transfer you end up regretting!
 
 ## Making a substitution
+To make a substitution, you need the IDs of the two players you want to swap. Note that here, a substitution is just a swap of two players in your squad. This means you can also use the substitution function to change the order of players on your bench.
+
+```{r read-data}
+my_team <- get_my_team()
+my_team
+```
+```{r sub-keeper}
+# Sub the keeper
+my_team %>%
+  team_substitute(p1 = 376,
+                  p2 = 398)
+```
+```{r sub-bench}
+# Swap bench order
+my_team %>%
+  team_substitute(p1 = 237,
+                  p2 = 199)
+```
+
 
 ## Changing captain or vice-captain
+Setting your captain or vice-captain can be done by assigning the roles using the `assign_role()` function.
+```{r set-captain}
+# Set Salah as captain
+my_team %>%
+  assign_role(pid = 283,
+              role = "c")
+```
+```{r set-vc}
+# Set Pope as vice-captain
+my_team %>%
+  assign_role(pid = 376,
+              role = "vc")
+```
 
 ## Making a transfer
+Transfers can be made without using the `update_team()` function as many times as you'd like, this gives you the opportunity to see what your team would look like before confirming your changes. Similiarly, this is useful for when you want to use your wildcard or free hit.
+
+{fantasy} also provides a helper function for identifying potential transfer targets. This function - `show_transfer_targets()` takes in the ID of a current squad player and returns a tibble of players who are a) the same position and b) affordable for the team, arranged by cost, points and selection %. The tibble gives all the available statistics for the players.
+
+```{r targets-salah}
+# Show all potential replacements for Mo Salah
+get_transfer_targets(my_team,
+                     p_out = 283)
+```
+
+You can use the returned tibble to get the ID of the player you want to transfer in:
+
+```{r transfer-salah}
+# Transfer in Raheem Sterling for Mo Salah
+my_team %>%
+  team_transfer(p_out = 283,
+                p_in = 304)
+```
+
+If you try to make an invalid transfer, the package will not allow it.
+
+```{r invalid-transfer}
+my_team %>%
+  team_transfer(p_out = 370,
+                p_in = 304)
+```
 
 ## Confirming your changes
+Before using the `update_team()` function, it is **strongly** recommended that you review your changes with the `summarise_team_changes()` function. This will notify you of any changes you have made.
 
+```{r summarise-changes}
+new_team <- my_team  %>%
+  # Sub keeper
+  team_substitute(p1 = 376,
+                  p2 = 398) %>%
+  # Swap bench order
+  team_substitute(p1 = 237,
+                  p2 = 199) %>%
+  # Set Martinelli to captain
+  assign_role(pid = 19,
+              role = "c") %>%
+  # Set newly subbed-in keeper (Henderson) as vice-captain
+  assign_role(pid = 398,
+              role = "vc") %>%
+  # Replace Salah with Sterling
+  team_transfer(p_out = 283,
+                p_in = 304)
+
+# Compare with the original team
+summarise_team_changes(current = new_team,
+                       previous = my_team)
+```
+Note that changes to order (e.g. in the code chunk above, shuffling the bench and putting Tarkowski as first sub) are not reported by `summarise_team_changes()`. But this can be verified by simply viewing the team again.
+
+```{r view-team}
+new_team
+```
+If you are happy with your new team and the various changes, you can confirm these changes with the update_team() function.
+```{r update-team, eval = FALSE}
+new_team %>%
+  update_team()
+```
 ## Using your wildcard, triple captain or sub boost

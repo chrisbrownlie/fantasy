@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  cache = TRUE,
+  eval = FALSE
 )
 ```
 
@@ -20,13 +22,17 @@ knitr::opts_chunk$set(
 [![lifecyle](https://img.shields.io/badge/lifecycle-experimental-orange)](https://lifecycle.r-lib.org/articles/stages.html)
 <!-- badges: end -->
 
-{fantasy} is a wrapper for the Fantasy Premier League API. It provides a clean, intuitive set of functions to extract all the key data that is available from the API, as well as enabling actions such as transfers and team changes to be enacted programmatically. 
+{fantasy} is a wrapper for the Fantasy Premier League API. It provides a clean, intuitive set of tidyverse-like functions to extract all the key data that is available from the API, as well as enabling actions such as transfers and team changes to be enacted programmatically. 
 
 After authenticating, the package provides a new class of object (`<team>`) that takes care of all the various restrictions on a team, so you can simply make transfers and substitutions and the package will notify you if they are not valid (e.g. more than 3 players from 1 club, not enough of a certain position in your team/starting XI, if a transfer exceeds your budget etc.). The `<team>` class also enables pretty printing of a team (see usage below).
 
 It maintains a tidyverse-like style, with all functions returning tibbles with readable column names. The package also provides helper functions for obtaining data from other useful sources, such as predicted team lineups from fantasyfootballscout.co.uk or relevant tweets from twitter.
 
 See [the package site](https://chrisbrownlie.github.io/fantasy/) for more details.
+
+> WARNING: This package is experimental and once authenticated can make irreversible changes to your Fantasy Premier League team - you have been warned.
+
+> NOTE: Due to the nature of the Fantasy Premier League being an ongoing competition and the API being out of my control, it hasn't been possible to fully test the package, so if you run into any problems please [raise an issue](https://github.com/chrisbrownlie/fantasy/issues) and I'll get round to it when I can.
 
 ## Installation
 
@@ -54,54 +60,37 @@ The reasons for building {fantasy} are because the two packages above:
 ## Usage
 Below are some examples of how to use the key functions in the package. See the [{fantasy} site](https://chrisbrownlie.github.io/fantasy/) for more detailed information and examples.
 
-```{r fake-load, eval=F}
-library(fantasy)
-```
-```{r actual-load, echo=F}
-pkgload::load_all()
-```
-```{r examples}
+There are generally two use (related) use cases for the {fantasy} package: analysing Fantasy Premier League data; and automating management of a Fantasy Premier League team. The two articles in the nav bar - 'Extracting data' and 'Managing your team' - address these two use cases in detail. If your use case is the latter of the two, I'd recommend reading 'Authentication' and 'Managing your team' before trying to enact any changes to your team. 
+
+
+```{r fixture-list}
 # Get all fixtures from the current season
 get_fixture_list()
-
+```
+```{r fixture_info}
 # Get stats from a particular fixture, by ID
 get_fixture_stats(fixture_id = 2)
+```
 
-# Get all team info
-get_teams()
-
-# Get all players info
-get_players()
-
-# Get a particular player's season statistics
-get_player_summary(player_id = 283)
-
+```{r authenticate}
 # Authenticate to allow restricted actions - see vignette for more information
 authenticate()
-
+```
+```{r view-team}
 # See your team
-get_my_team()
+my_team <- get_my_team()
+my_team
+```
 
+After authenticating you can make changes to your team and submit them with `update_team()`.
+```{r examples-team-changes}
 # Swap two players in your team
 # - {fantasy} will automatically handle any restrictions or reordering of your team
-get_my_team() %>%
-  team_substitute(p1 = 465, p2 = 166)
-
-# Change the captain or vice captain
-get_my_team() %>%
-  assign_role(pid = 255, role = "c") %>%
-  assign_role(pid = 15, role = "vc")
-
-# After making any changes, update your team on the FPL site
-get_my_team() %>%
-  team_substitute(p1 = 465, p2 = 166)%>%
-  assign_role(pid = 255, role = "c") %>%
-  assign_role(pid = 15, role = "vc") %>%
-  update_team()
-
-### Non-FPL API functions
-# Get predicted lineups from fantasyfootballscout.co.uk
-get_predicted_lineups()
+# Substitutions and role changes can be made as many times as desired
+my_team %>%
+  team_substitute(p1 = 430, p2 = 199) %>%
+  assign_role(pid = 28, role = "c") %>%
+  assign_role(pid = 19, role = "vc")
 ```
 
 # Acknowledgements

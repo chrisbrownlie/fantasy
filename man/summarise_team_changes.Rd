@@ -4,12 +4,16 @@
 \alias{summarise_team_changes}
 \title{Summarise the difference between two team objects}
 \usage{
-summarise_team_changes(previous, current)
+summarise_team_changes(current, previous, type = "report")
 }
 \arguments{
+\item{current}{the current team object}
+
 \item{previous}{the previous team object}
 
-\item{current}{the current team object}
+\item{type}{the return type, if 'report' (the default), differences between
+the two teams will be printed prettily to the console. If 'transfer_list', will return
+a list of transfers}
 }
 \value{
 prints information to the console on the differences between the two teams

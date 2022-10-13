@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -19,14 +20,38 @@ library(fantasy)
 ```
 One of the ways to use {fantasy} is for extracting data from the FPL API for further analysis. This might be in order to analyse good players to sign, track your progress over the season, or even build a machine learning model to make team decisions for you. There are a few different types of data that can be extracted.
 
-## Fixtures
+The sections below show the most useful functions for extracting data - note that none of these require authentication so can be used without account details.
 
-## Teams
+## Fixtures
+```{r get-fixtures}
+# Get a list of all fixtures for the season, with scores, gameweek and difficulty.
+get_fixture_list()
+
+# Get a (long) table of stats for each game, including:
+# goals, penalties assists, cards, saves etc.
+get_fixture_stats()
+
+# Get information on all the gameweeks
+get_gameweek_info()
+
+# Get the current gameweek
+get_current_gameweek()
+```
+
+## Teams (Premier League teams)
+```{r get-teams}
+# Get premier league teams with their record so far this season and various strength ratings
+get_teams()
+
+# Get the likely starting XIs for the next gameweek, from fantasyfootballscout.co.uk
+get_predicted_lineups()
+```
 
 ## Players
+```{r get-players}
+# Get all players and their info
+get_players()
 
-## Leagues
-
-## Managers/Users
-
-## Predicted lineups (alternative source)
+# Get season summary for a specific player
+get_player_summary(player_id = 273)
+```
