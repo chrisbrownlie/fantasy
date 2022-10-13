@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# fantasy
+# fantasy 
 
 <!-- badges: start -->
 [![build](https://github.com/chrisbrownlie/fantasy/actions/workflows/build.yaml/badge.svg)](https://github.com/chrisbrownlie/fantasy/actions/workflows/build.yaml)
