@@ -9,6 +9,8 @@
 #' 0 indicates rounding to 2 decimal places
 #'
 #' @return a number denoting the percentile
+#'
+#' @keywords internal
 percentile <- function(rank,
                        out_of,
                        nearest = 5) {
@@ -35,6 +37,7 @@ percentile <- function(rank,
 #' @param abbr the abbreviation to get the long form for
 #'
 #' @return a string that is more user friendly than abbr
+#' @keywords internal
 user_friendly <- function(abbr) {
   switch(abbr,
          "bboost" = "Bench Boost",
@@ -49,6 +52,7 @@ user_friendly <- function(abbr) {
 #' @param replace what to use if object is empty
 #'
 #' @return object, or replace if object is empty
+#' @keywords internal
 if_empty <- function(object, replace = NA) {
   ifelse(!length(object), replace, object)
 }

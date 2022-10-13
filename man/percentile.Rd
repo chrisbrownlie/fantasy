@@ -21,3 +21,4 @@ a number denoting the percentile
 Given two numbers, will return what percentile the first is of the second
 e.g. 9/10 is the 90th percentile, 2/3 is the 66th percentile, etc.
 }
+\keyword{internal}

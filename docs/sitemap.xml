@@ -46,6 +46,9 @@
     <loc>https://chrisbrownlie.github.io/fantasy/reference/authenticate.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/chips.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/construct.html</loc>
   </url>
   <url>
@@ -58,13 +61,31 @@
     <loc>https://chrisbrownlie.github.io/fantasy/reference/formatting.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/get_current_gameweek.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/get_fixture_list.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/get_fixture_stats.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/get_gameweek_info.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/get_league.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/get_manager_info.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/get_my_leagues.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/get_my_team.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/get_player_cost.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/get_player_summary.html</loc>
@@ -79,7 +100,13 @@
     <loc>https://chrisbrownlie.github.io/fantasy/reference/get_teams.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/get_transfer_targets.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/identify.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/if_empty.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/index.html</loc>
@@ -95,6 +122,9 @@
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/new_team_selection.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/percentile.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/perform_query.html</loc>
@@ -113,6 +143,9 @@
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/query_general_data.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/query_manager_data.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/require_authentication.html</loc>
@@ -139,10 +172,16 @@
     <loc>https://chrisbrownlie.github.io/fantasy/reference/team_substitute.html</loc>
   </url>
   <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/team_to_df.html</loc>
+  </url>
+  <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/team_transfer.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/update_team.html</loc>
+  </url>
+  <url>
+    <loc>https://chrisbrownlie.github.io/fantasy/reference/user_friendly.html</loc>
   </url>
   <url>
     <loc>https://chrisbrownlie.github.io/fantasy/reference/validate_team.html</loc>

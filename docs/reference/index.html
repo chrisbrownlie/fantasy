@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">fantasy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +61,11 @@
 
       <dl><dt>
           
+          <code><a href="get_current_gameweek.html">get_current_gameweek()</a></code> 
+        </dt>
+        <dd>Get current gameweek</dd>
+      </dl><dl><dt>
+          
           <code><a href="get_fixture_list.html">get_fixture_list()</a></code> 
         </dt>
         <dd>Get fixture list</dd>
@@ -71,9 +76,14 @@
         <dd>Get fixture stats</dd>
       </dl><dl><dt>
           
-          <code><a href="get_my_team.html">get_my_team()</a></code> 
+          <code><a href="get_gameweek_info.html">get_gameweek_info()</a></code> 
         </dt>
-        <dd>Get my team</dd>
+        <dd>Get gameweek information</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_player_cost.html">get_player_cost()</a></code> 
+        </dt>
+        <dd>Get the cost for a given player</dd>
       </dl><dl><dt>
           
           <code><a href="get_player_summary.html">get_player_summary()</a></code> 
@@ -107,14 +117,9 @@
 
       <dl><dt>
           
-          <code><a href="authenticate.html">authenticate()</a></code> 
+          <code><a href="chips.html">activate_chip()</a></code> <code><a href="chips.html">deactivate_chip()</a></code> 
         </dt>
-        <dd>Authenticate a user for the Fantasy Premier League API</dd>
-      </dl><dl><dt>
-          
-          <code><a href="get_my_team.html">get_my_team()</a></code> 
-        </dt>
-        <dd>Get my team</dd>
+        <dd>Activate or deactivate one of your chips</dd>
       </dl><dl><dt>
           
           <code><a href="assign_role.html">assign_role()</a></code> 
@@ -122,24 +127,44 @@
         <dd>Assign a captain or vice-captain</dd>
       </dl><dl><dt>
           
+          <code><a href="authenticate.html">authenticate()</a></code> 
+        </dt>
+        <dd>Authenticate a user for the Fantasy Premier League API</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_league.html">get_league()</a></code> 
+        </dt>
+        <dd>Get league</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_manager_info.html">get_manager_info()</a></code> 
+        </dt>
+        <dd>Get information on a manager</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_my_leagues.html">get_my_leagues()</a></code> 
+        </dt>
+        <dd>Get leagues</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_my_team.html">get_my_team()</a></code> 
+        </dt>
+        <dd>Get my team</dd>
+      </dl><dl><dt>
+          
+          <code><a href="get_transfer_targets.html">get_transfer_targets()</a></code> 
+        </dt>
+        <dd>Show all potential replacements for a particular player</dd>
+      </dl><dl><dt>
+          
           <code><a href="team_substitute.html">team_substitute()</a></code> 
         </dt>
         <dd>Switch the position of two players</dd>
       </dl><dl><dt>
           
-          <code><a href="show_transfer_targets.html">show_transfer_targets()</a></code> 
-        </dt>
-        <dd>Show all potential replacements for a particular player</dd>
-      </dl><dl><dt>
-          
           <code><a href="team_transfer.html">team_transfer()</a></code> 
         </dt>
         <dd>Replace a player in your team with a different valid player</dd>
-      </dl><dl><dt>
-          
-          <code><a href="activate_chip.html">activate_chip()</a></code> 
-        </dt>
-        <dd>Use one of your chips</dd>
       </dl><dl><dt>
           
           <code><a href="summarise_team_changes.html">summarise_team_changes()</a></code> 
@@ -163,6 +188,16 @@
 
       <dl><dt>
           
+          <code><a href="formatting.html">global_remove_formatting()</a></code> <code><a href="formatting.html">global_restore_formatting()</a></code> 
+        </dt>
+        <dd>Remove all formatting of team objects for the current session</dd>
+      </dl><dl><dt>
+          
+          <code><a href="is_team.html">is_team()</a></code> 
+        </dt>
+        <dd>Is this object a team object?</dd>
+      </dl><dl><dt>
+          
           <code><a href="player_from_id.html">player_from_id()</a></code> 
         </dt>
         <dd>Convert player ID to name</dd>
@@ -173,24 +208,14 @@
         <dd>Search for a player ID by name</dd>
       </dl><dl><dt>
           
-          <code><a href="team_from_id.html">team_from_id()</a></code> 
-        </dt>
-        <dd>Convert team ID to abbreviation</dd>
-      </dl><dl><dt>
-          
           <code><a href="team.html">team()</a></code> 
         </dt>
         <dd>Create a new team and validate it</dd>
       </dl><dl><dt>
           
-          <code><a href="is_team.html">is_team()</a></code> 
+          <code><a href="team_from_id.html">team_from_id()</a></code> 
         </dt>
-        <dd>Is this object a team object?</dd>
-      </dl><dl><dt>
-          
-          <code><a href="formatting.html">global_remove_formatting()</a></code> <code><a href="formatting.html">global_restore_formatting()</a></code> 
-        </dt>
-        <dd>Remove all formatting of team objects for the current session</dd>
+        <dd>Convert team ID to abbreviation</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

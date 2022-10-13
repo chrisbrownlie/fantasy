@@ -15,3 +15,4 @@ a string that is more user friendly than abbr
 \description{
 Make an abbreviation user friendly using a lookup
 }
+\keyword{internal}

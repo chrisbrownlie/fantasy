@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">fantasy</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,22 +78,36 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chrisbrownlie.github.io/fantasy/">fantasy</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Enabling function caching...</span></span></code></pre></div>
-<p>This article gives some end-to-end examples of how the {fantasy}
-package could be used.</p>
+<p>This article gives a brief description of how some example tasks
+might be completed with the fantasy package.</p>
 <div class="section level2">
 <h2 id="analysing-the-best-value-for-money">Analysing the best value for money<a class="anchor" aria-label="anchor" href="#analysing-the-best-value-for-money"></a>
 </h2>
+<p>Possible - Read in and visualise player info with
+<code><a href="../reference/get_players.html">get_players()</a></code> - See each players individual contributions
+this season with <code><a href="../reference/get_fixture_stats.html">get_fixture_stats()</a></code> - Look at upcoming
+fixtures with <code><a href="../reference/get_fixture_list.html">get_fixture_list()</a></code> - Investigate individual
+season progression with <code><a href="../reference/get_player_summary.html">get_player_summary()</a></code></p>
 </div>
 <div class="section level2">
 <h2 id="automating-injury-avoidance">Automating injury-avoidance<a class="anchor" aria-label="anchor" href="#automating-injury-avoidance"></a>
 </h2>
-</div>
-<div class="section level2">
-<h2 id="identifying-the-optimal-setup-for-your-team">Identifying the optimal setup for your team<a class="anchor" aria-label="anchor" href="#identifying-the-optimal-setup-for-your-team"></a>
-</h2>
+<ul>
+<li>Schedule R script to run that checks your team for injuries:</li>
+<li>Read in team with <code><a href="../reference/get_my_team.html">get_my_team()</a></code>
+</li>
+<li>Use <code><a href="../reference/get_players.html">get_players()</a></code> to identify injured players (status
+column)</li>
+<li>Check which of your squad aren’t expected to start with
+<code><a href="../reference/get_predicted_lineups.html">get_predicted_lineups()</a></code>
+</li>
+<li>Identify possible replacements with
+<code><a href="../reference/get_transfer_targets.html">get_transfer_targets()</a></code> and set conditions for using
+wildcard/free-hit with <code><a href="../reference/chips.html">activate_chip()</a></code>
+</li>
+<li>Confirm the changes with <code><a href="../reference/update_team.html">update_team()</a></code>
+</li>
+</ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

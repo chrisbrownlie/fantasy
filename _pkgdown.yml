@@ -33,24 +33,35 @@ reference:
   - title: Extract data
     desc:  Request data from the FPL API
   - contents:
-    -
+    - get_current_gameweek
+    - get_fixture_list
+    - get_fixture_stats
+    - get_gameweek_info
+    - get_player_cost
+    - get_player_summary
+    - get_players
+    - get_predicted_lineups
+    - get_teams
   - title: Manage your team
   - contents:
-    - authenticate
-    - get_my_team
-    - assign_role
-    - team_substitute
-    - get_transfer_targets
-    - team_transfer
     - activate_chip
+    - assign_role
+    - authenticate
+    - get_league
+    - get_manager_info
+    - get_my_leagues
+    - get_my_team
+    - get_transfer_targets
+    - team_substitute
+    - team_transfer
     - summarise_team_changes
     - update_team
   - title: Utility functions
   - contents:
-    - player_from_id
-    - search_for_player
-    - team_from_id
-    - team
-    - is_team
     - global_remove_formatting
     - global_restore_formatting
+    - is_team
+    - player_from_id
+    - search_for_player
+    - team
+    - team_from_id
