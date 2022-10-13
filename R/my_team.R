@@ -43,111 +43,6 @@ get_my_team <- function() {
        chips = chips)
 }
 
-#' Update your team
-#'
-#' Send a request to the API to update a team.
-#'
-#' @param team either an object with class team, or a list of length
-#' three with the following positional elements: (1) a numeric vector of length
-#' 15 indicating the 15 player IDs of the team; (2) a single numeric ID of the
-#' captain; (3) a single numeric ID of the vice-captain.
-#' If a list is supplied, it will be converted to a team object first
-#' before the update request is sent.
-#' @param verbose an integer from 0 to 3 denoting how verbose the request should be -
-#' passed to httr2::req_perform (0 = no output, 3 = maximum output)
-#' @param report_changes logical - should the overall changes to the team be
-#' summarised and printed to the console?
-#'
-#' @return informs the user whether the update request was successful or not
-#'
-#' @export
-update_team <- function(team,
-                        verbose = 0,
-                        report_changes = TRUE) {
-  UseMethod("update_team")
-}
-
-#' @export
-update_team.team <- function(team,
-                                       verbose = 0,
-                                       report_changes = TRUE) {
-
-  # Check authentication
-  require_authentication()
-
-  # Validate inputs
-  validated <- validate_team(team)
-
-  # If changes to be summarised, get current team before update
-  if (report_changes) {
-    pre_changes <- get_my_team()
-  }
-
-  # Get team payload in format for server
-  cli::cli_alert("Creating payload...")
-  picks_payload_lists <- purrr::map(1:15, ~list(element = attr(team, "submission_order")[.x],
-                                                is_captain = attr(team, "submission_order")[.x]==attr(team, "captain"),
-                                                is_vice_captain = attr(team, "submission_order")[.x]==attr(team, "vc"),
-                                                position = .x))
-
-  payload <- list(
-    'picks' = picks_payload_lists,
-    'chips' = NULL
-  )
-
-  cli::cli_alert("Sending POST request...")
-  rep <- httr2::request("https://fantasy.premierleague.com/api/my-team/7330951/") %>%
-    httr2::req_headers(
-      'content-type' = 'application/json',
-      'origin' = 'https://fantasy.premierleague.com',
-      'referer' = 'https://fantasy.premierleague.com/my-team',
-      "Cookie" = paste0("pl_profile=", getOption("FANTASY_COOKIE"))
-    ) %>%
-    httr2::req_body_json(data = payload) %>%
-    httr2::req_method("POST") %>%
-    httr2::req_perform(verbosity = verbose)
-
-  if (rep$status_code == 200) {
-    if (report_changes) {
-      cli::cli_alert_success("Team update successful!")
-      summarise_team_changes(previous = pre_changes,
-                             current = team)
-    } else {
-      cli::cli_alert_success("Team update successful!")
-    }
-  } else {
-    cli::cli_abort("Team changes could not be made")
-  }
-}
-
-#' @export
-update_team.list <- function(team,
-                             verbose = 0,
-                             report_changes = TRUE) {
-
-  # Check that team is valid
-  if (length(team) != 3) cli::cli_abort("If using a list to update a team, must be a named list of length 3")
-  if (length(team[[1]]) != 15|!is.numeric(team[[1]])) cli::cli_abort("If using a list to update a team, the first element must be a numeric vector of 15 player IDs")
-  if (length(team[[2]]) != 1 |!is.numeric(team[[2]])) cli::cli_abort("If using a list to update a team, the second element must be a single numeric player ID of the captain")
-  if (length(team[[3]]) != 1 |!is.numeric(team[[3]])) cli::cli_abort("If using a list to update a team, the third element must be a single numeric player ID of the vice-captain")
-
-  # Convert to team
-  cli::cli_alert("Converting list to {.cls team} object...")
-  valid_team <- team(players = team[[1]],
-                               captain = team[[2]],
-                               vc = team[[3]])
-
-  update_team(valid_team,
-              verbose = verbose)
-}
-
-#' @export
-update_team.default <- function(team,
-                                verbose = 0,
-                                report_changes = TRUE) {
-  cli::cli_abort("{.fun update_team} can only be used with objects of class {.cls team} or lists.")
-}
-
 #' Assign a captain or vice-captain
 #'
 #' @param team an object with class team
@@ -190,14 +85,29 @@ assign_role <- function(team,
 #' Take in two team objects and summarise the changes between the two,
 #' with the changes being printed to the console.
 #'
-#' @param previous the previous team object
 #' @param current the current team object
+#' @param previous the previous team object
+#' @param type the return type, if 'report' (the default), differences between
+#' the two teams will be printed prettily to the console. If 'transfer_list', will return
+#' a list of transfers
 #'
 #' @return prints information to the console on the differences between the two teams
 #'
 #' @export
-summarise_team_changes <- function(previous,
-                                   current) {
+summarise_team_changes <- function(current,
+                                   previous,
+                                   type = "report") {
+
+  if (!type %in% c("report", "transfer_list")) cli::cli_abort("{.arg type} must be one of '{.val report}' or '{.val transfer_list}'")
+
+  # If previous is missing and user is authenticated, compare new team to their current team
+  if (missing(previous)) {
+    if (is_authenticated()) {
+      cli::cli_alert_warning("You have not supplied a previous team, so using your current FPL team for comparison")
+    } else {
+      cli::cli_abort("You have not supplied a {.arg previous} team to compare to")
+    }
+  }
 
   # Check argument types
   if (!is_team(previous)) cli::cli_abort("{.arg previous} must be an object of class {.cls team}")
@@ -206,52 +116,63 @@ summarise_team_changes <- function(previous,
   # List transfers
   transfers_in <- current$id[!current$id %in% previous$id]
   transfers_out <- previous$id[!previous$id %in% current$id]
+  transfer_list <- purrr::imap(transfers_in,
+                               ~list(element_in = .x,
+                                     element_out = transfers_out[.y],
+                                     purchase_price = get_player_cost(.x)*10,
+                                     selling_price = get_player_cost(transfers_out[.y])*10))
 
   # List substitutions
   subs_in <- current$id[current$id %in% attr(current, "submission_order")[1:11] & !current$id %in% attr(previous, "submission_order")[1:11] & !current$id %in% transfers_in]
   subs_out <- previous$id[previous$id %in% attr(previous, "submission_order")[1:11] & !previous$id %in% attr(current, "submission_order")[1:11]  & !previous$id %in% transfers_out]
 
-  cli::cli_alert_info("Team changes:")
+  if (type == "report") {
+    cli::cli_alert_info("Team changes:")
 
-  # Print information on transfers
-  if (length(transfers_in)) {
-    transf_in <- paste(cli::col_yellow(current$known_as[current$id %in% transfers_in]), collapse = "; ")
-    cli::cli_text(paste0("{cli::symbol$arrow_right}", cli::col_cyan("Transfers In: "), transf_in))
-  }
-  if (length(transfers_out)) {
-    transf_out <- paste(cli::col_yellow(previous$known_as[previous$id %in% transfers_out]), collapse = "; ")
-    cli::cli_text(paste0("{cli::symbol$arrow_left}", cli::col_cyan("Transfers Out: "), transf_out))
-  }
-  if (!length(transfers_in) & !length(transfers_out)) {
-    cli::cli_text("{cli::symbol$line} No transfers.")
-  }
+    # Print information on transfers
+    if (length(transfers_in)) {
+      transf_in <- paste(cli::col_yellow(current$known_as[current$id %in% transfers_in]), collapse = "; ")
+      cli::cli_text(paste0("{cli::symbol$arrow_right}", cli::col_cyan("Transfers In: "), transf_in))
+    }
+    if (length(transfers_out)) {
+      transf_out <- paste(cli::col_yellow(previous$known_as[previous$id %in% transfers_out]), collapse = "; ")
+      cli::cli_text(paste0("{cli::symbol$arrow_left}", cli::col_cyan("Transfers Out: "), transf_out))
+    }
+    if (!length(transfers_in) & !length(transfers_out)) {
+      cli::cli_text("{cli::symbol$line} No transfers.")
+    }
 
-  # Print information on substitutions
-  if (length(subs_in)) {
-    subin <- paste(paste0(cli::col_yellow(current$known_as[current$id %in% subs_in]), " (", cli::col_blue(current$position[current$id %in% subs_in]), ")"), collapse = "; ")
-    cli::cli_text(paste0("{cli::symbol$arrow_up}", cli::col_cyan("Subs In: "), subin))
-  }
-  if (length(subs_out)) {
-    subout <- paste(paste0(cli::col_yellow(current$known_as[current$id %in% subs_out]), " (", cli::col_blue(current$position[current$id %in% subs_out]), ")"), collapse = "; ")
-    cli::cli_text(paste0("{cli::symbol$arrow_down}", cli::col_cyan("Subs Out: "), subout))
-  }
-  if (!length(subs_in) & !length(subs_out)) {
-    cli::cli_text("{cli::symbol$line} No substitutes.")
-  }
+    # Print information on substitutions
+    if (length(subs_in)) {
+      subin <- paste(paste0(cli::col_yellow(current$known_as[current$id %in% subs_in]), " (", cli::col_blue(current$position[current$id %in% subs_in]), ")"), collapse = "; ")
+      cli::cli_text(paste0("{cli::symbol$arrow_up}", cli::col_cyan("Subs In: "), subin))
+    }
+    if (length(subs_out)) {
+      subout <- paste(paste0(cli::col_yellow(current$known_as[current$id %in% subs_out]), " (", cli::col_blue(current$position[current$id %in% subs_out]), ")"), collapse = "; ")
+      cli::cli_text(paste0("{cli::symbol$arrow_down}", cli::col_cyan("Subs Out: "), subout))
+    }
+    if (!length(subs_in) & !length(subs_out)) {
+      cli::cli_text("{cli::symbol$line} No substitutes.")
+    }
 
-  # Print information on role changes
-  if (attr(previous, "captain") != attr(current, "captain")) {
-    prev_cap <- cli::col_red(previous$known_as[previous$id == attr(previous, "captain")])
-    current_cap <- cli::col_green(current$known_as[current$id == attr(current, "captain")])
-    cli::cli_text(paste0("{cli::symbol$circle_filled} Captain: ", prev_cap, " -> ", current_cap))
-  }
-  if (attr(previous, "vc") != attr(current, "vc")) {
-    prev_vc <- cli::col_red(previous$known_as[previous$id == attr(previous, "vc")])
-    current_vc <- cli::col_green(current$known_as[current$id == attr(current, "vc")])
-    cli::cli_text(paste0("{cli::symbol$circle_double} Vice-Captain: ", prev_vc, " -> ", current_vc))
-  }
-  if (attr(previous, "captain") == attr(current, "captain") & attr(previous, "vc") == attr(current, "vc")) {
-    cli::cli_text("{cli::symbol$line} No captaincy changes.")
+    # Print information on role changes
+    if (attr(previous, "captain") != attr(current, "captain")) {
+      prev_cap <- cli::col_red(previous$known_as[previous$id == attr(previous, "captain")])
+      current_cap <- cli::col_green(current$known_as[current$id == attr(current, "captain")])
+      cli::cli_text(paste0("{cli::symbol$circle_filled} Captain: ", prev_cap, " -> ", current_cap))
+    }
+    if (attr(previous, "vc") != attr(current, "vc")) {
+      prev_vc <- cli::col_red(previous$known_as[previous$id == attr(previous, "vc")])
+      current_vc <- cli::col_green(current$known_as[current$id == attr(current, "vc")])
+      cli::cli_text(paste0("{cli::symbol$circle_double} Vice-Captain: ", prev_vc, " -> ", current_vc))
+    }
+    if (attr(previous, "captain") == attr(current, "captain") & attr(previous, "vc") == attr(current, "vc")) {
+      cli::cli_text("{cli::symbol$line} No captaincy changes.")
+    }
+  } else if (type == "transfer_list") {
+    return(transfer_list)
+  } else {
+    invisible(NULL)
   }
 
 }
