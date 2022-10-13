@@ -182,3 +182,16 @@ search_for_player <- function(search) {
     filter(grepl(pattern = search, x = .data$name, ignore.case = TRUE)) %>%
     transmute(.data$id, .data$name, team = team_from_id(.data$team, full = TRUE))
 }
+
+#' Get the cost for a given player
+#'
+#' @param pid the ID of the player to get the cost for
+#'
+#' @return the current value of the player
+#'
+#' @export
+get_player_cost <- function(pid) {
+  get_players() %>%
+    filter(id == pid) %>%
+    pull(cost)
+}
