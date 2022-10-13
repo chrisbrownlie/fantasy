@@ -89,6 +89,10 @@ require_authentication <- function() {
   if (!length(getOption("FANTASY_COOKIE"))) authenticate()
   invisible(NULL)
 }
+is_authenticated <- function() {
+  length(getOption("FANTASY_COOKIE"))
+}
+
 
 #' Get a logged in users manager ID and save to environment variable
 #'
