@@ -29,3 +29,26 @@ percentile <- function(rank,
     cli::cli_abort("{.arg nearest} must be one of: 0, 1, 5, 10")
   }
 }
+
+#' Make an abbreviation user friendly using a lookup
+#'
+#' @param abbr the abbreviation to get the long form for
+#'
+#' @return a string that is more user friendly than abbr
+user_friendly <- function(abbr) {
+  switch(abbr,
+         "bboost" = "Bench Boost",
+         "3xc" = "Triple Captain",
+         "wildcard" = "Wildcard",
+         "freehit" = "Free Hit")
+}
+
+#' If empty then replace
+#'
+#' @param object to check for emptiiness
+#' @param replace what to use if object is empty
+#'
+#' @return object, or replace if object is empty
+if_empty <- function(object, replace = NA) {
+  ifelse(!length(object), replace, object)
+}
