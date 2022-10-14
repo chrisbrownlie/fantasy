@@ -181,18 +181,17 @@ test_that("team helper/validator fails with invalid teams", {
     regexp = "single non-negative numeric"
   )
 
-  # # Warning that transfers will cost points
-  # Expect snapshot doesn't seem to work consistently for me
-  # expect_snapshot(
-  #   {
-  #   new_team <- team(players = valid_team_ids,
-  #                    captain = valid_team_ids[1],
-  #                    vc = valid_team_ids[2],
-  #                    bank = 10,
-  #                    transfers = -1,
-  #                    chips = all_chips())
-  #   }
-  # )
+  # Warning that transfers will cost points
+  expect_snapshot(
+    {
+    new_team <- team(players = valid_team_ids,
+                     captain = valid_team_ids[1],
+                     vc = valid_team_ids[2],
+                     bank = 10,
+                     transfers = -1,
+                     chips = all_chips())
+    }
+  )
   # Invalid transfers argument
   expect_error(
     team(players = valid_team_ids,

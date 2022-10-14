@@ -6,6 +6,9 @@
 \usage{
 \method{print}{team}(x, ...)
 }
+\value{
+prints the team to the console, formatted based on option FANTASY_UNFORMAT
+}
 \description{
 Format function for team selection
 }

@@ -9,6 +9,9 @@ is_team(x)
 \arguments{
 \item{x}{an object to test}
 }
+\value{
+logical indicating whether x is of class 'team' or not
+}
 \description{
 Is this object a team object?
 }

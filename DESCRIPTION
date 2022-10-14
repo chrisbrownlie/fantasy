@@ -1,9 +1,9 @@
 Package: fantasy
-Title: Fantasy Premier League API Wrapper
+Title: Wrapper for Fantasy Premier League API
 Version: 0.1.0
 Authors@R: 
     person(given = "Chris", family = "Brownlie", email = "chris.brownlie@hotmail.co.uk", role = c("aut", "cre"))
-Description: Functions for interacting with the Fantasy Premier League API, enabling 
+Description: Functions for interacting with the Fantasy Premier League API <https://fantasy.premierleague.com/api/bootstrap-static/>, enabling 
   extraction of data as well as automated updating of teams.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -14,7 +14,6 @@ Imports:
   httr,
   tibble,
   dplyr,
-  memoise,
   cli,
   purrr,
   rvest,

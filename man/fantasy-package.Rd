@@ -4,9 +4,9 @@
 \name{fantasy-package}
 \alias{fantasy}
 \alias{fantasy-package}
-\title{fantasy: Fantasy Premier League API Wrapper}
+\title{fantasy: Wrapper for Fantasy Premier League API}
 \description{
-Functions for interacting with the Fantasy Premier League API, enabling extraction of data as well as automated updating of teams.
+Functions for interacting with the Fantasy Premier League API \url{https://fantasy.premierleague.com/api/bootstrap-static/}, enabling extraction of data as well as automated updating of teams.
 }
 \seealso{
 Useful links:

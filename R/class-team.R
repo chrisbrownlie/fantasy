@@ -194,6 +194,8 @@ team <- function(players,
 }
 
 #' Format function for team selection
+#'
+#' @return prints the team to the console, formatted based on option FANTASY_UNFORMAT
 #' @keywords internal
 #' @export
 print.team <- function(x, ...) {
@@ -235,6 +237,8 @@ print.team <- function(x, ...) {
 #' Is this object a team object?
 #'
 #' @param x an object to test
+#'
+#' @return logical indicating whether x is of class 'team' or not
 #'
 #' @export
 is_team <- function(x) inherits(x, "team")
